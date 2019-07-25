@@ -110,7 +110,7 @@ for t, (data, target) in enumerate(train_loader):
 ### Citing the Project
 
 ```
-@misc{stable-baselines,
+@misc{continual-learning-data-former,
   author = {Lesort, Timothée},
   title = {Continual Learning Data Former},
   year = {2019},

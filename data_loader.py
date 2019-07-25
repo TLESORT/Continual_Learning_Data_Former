@@ -12,7 +12,7 @@ from PIL import Image
 import os
 
 
-class Dataset_Loader(data.Dataset):
+class DatasetLoader(data.Dataset):
     def __init__(self, data, current_task=0, transform=None, load_images=False, path=None):
 
         '''
@@ -31,18 +31,16 @@ class Dataset_Loader(data.Dataset):
         self.load_images = load_images
         self.path = path
 
-        # tentative de creation d'un dataset propre!
         'Initialization'
         if self.load_images:
             list_data = range(len(self.dataset[self.current_task][1]))
         else:
-            list_data=range(self.dataset[self.current_task][1].shape[0])
-        list_labels=self.dataset[self.current_task][2].tolist()
+            list_data = range(self.dataset[self.current_task][1].shape[0])
+        list_labels = self.dataset[self.current_task][2].tolist()
 
-        #convert it to dictionnary for pytorch
+        # convert it to dictionnary for pytorch
         self.list_IDs = {i: list_data[i] for i in range(0, len(list_data))}
         self.labels = {i: list_labels[i] for i in range(0, len(list_labels))}
-
 
     def __len__(self):
         return len(self.dataset[self.current_task][1])
@@ -86,7 +84,6 @@ class Dataset_Loader(data.Dataset):
         list_data = range(self.dataset[self.current_task][1].shape[0])
         list_labels = self.dataset[self.current_task][2].tolist()
 
-
         # convert it to dictionnary for pytorch
         self.list_IDs = {i: list_data[i] for i in range(0, len(list_data))}
         self.labels = {i: list_labels[i] for i in range(0, len(list_labels))}
@@ -112,7 +109,7 @@ class Dataset_Loader(data.Dataset):
         labels = torch.LongTensor(number)
 
         for i in range(number):
-            img, y =  self.__getitem__(indices[i].item())
+            img, y = self.__getitem__(indices[i].item())
 
             if i == 0:
                 batch = torch.FloatTensor(number, shape[0], shape[1], shape[2])
@@ -130,8 +127,10 @@ class Dataset_Loader(data.Dataset):
         :param new_data: data to add to the actual task
         :return: the actual dataset with supplementary data inside
         '''
-        self.dataset[self.current_task][1] = torch.cat((self.dataset[self.current_task][1], new_data.dataset[task][1]), 0).clone()
-        self.dataset[self.current_task][2] = torch.cat((self.dataset[self.current_task][2], new_data.dataset[task][2]), 0).clone()
+        self.dataset[self.current_task][1] = torch.cat((self.dataset[self.current_task][1], new_data.dataset[task][1]),
+                                                       0).clone()
+        self.dataset[self.current_task][2] = torch.cat((self.dataset[self.current_task][2], new_data.dataset[task][2]),
+                                                       0).clone()
 
         return self
 
@@ -145,14 +144,13 @@ class Dataset_Loader(data.Dataset):
 
     def save(self, path, force=False):
         if force:
-           torch.save(self.dataset, path)
+            torch.save(self.dataset, path)
         else:
             print("WE DO NOT SAVE ANYMORE")
 
+    def visualize_sample(self, path, number, shape):
 
-    def visualize_sample(self, path , number, shape):
-
-        data, target = self.get_sample(number , shape)
+        data, target = self.get_sample(number, shape)
 
         # get sample in order from 0 to 9
         target, order = target.sort()
@@ -175,14 +173,14 @@ class Dataset_Loader(data.Dataset):
             save_images(data_np[:image_frame_dim * image_frame_dim, :, :, :], [image_frame_dim, image_frame_dim],
                         path)
         elif shape[2] == 3:
-            #data = data.numpy().reshape(number, shape[0], shape[1], shape[2])
-            #if self.dataset_name == 'cifar10':
+            # data = data.numpy().reshape(number, shape[0], shape[1], shape[2])
+            # if self.dataset_name == 'cifar10':
             data = data.numpy().reshape(number, shape[2], shape[1], shape[0])
-            #data = data.numpy().reshape(number, shape[0], shape[1], shape[2])
+            # data = data.numpy().reshape(number, shape[0], shape[1], shape[2])
 
             # remap between 0 and 1
-            #data = data - data.min()
-            #data = data / data.max()
+            # data = data - data.min()
+            # data = data / data.max()
 
             data = data / 2 + 0.5  # unnormalize
             make_samples_batche(data[:number], number, path)
@@ -192,13 +190,11 @@ class Dataset_Loader(data.Dataset):
 
         return data
 
+    def visualize_reordered(self, path, number, shape, permutations):
 
+        data = self.visualize_sample(path, number, shape)
 
-    def visualize_reordered(self, path , number, shape, permutations):
-
-        data=self.visualize_sample(path, number, shape)
-
-        data = data.reshape(-1, shape[0]*shape[1]*shape[2])
+        data = data.reshape(-1, shape[0] * shape[1] * shape[2])
         concat = deepcopy(data)
 
         image_frame_dim = int(np.floor(np.sqrt(number)))
@@ -212,18 +208,19 @@ class Dataset_Loader(data.Dataset):
             concat = torch.cat((concat, reordered_data), 0)
 
         if shape[2] == 1:
-            concat = concat.numpy().reshape(number*self.n_tasks, shape[0], shape[1], shape[2])
-            save_images(concat[:image_frame_dim * image_frame_dim*self.n_tasks, :, :, :], [self.n_tasks*image_frame_dim, image_frame_dim],
+            concat = concat.numpy().reshape(number * self.n_tasks, shape[0], shape[1], shape[2])
+            save_images(concat[:image_frame_dim * image_frame_dim * self.n_tasks, :, :, :],
+                        [self.n_tasks * image_frame_dim, image_frame_dim],
                         path)
         else:
-            concat = concat.numpy().reshape(number*self.n_tasks, shape[2], shape[1], shape[0])
+            concat = concat.numpy().reshape(number * self.n_tasks, shape[2], shape[1], shape[0])
             make_samples_batche(concat[:self.batch_size], self.batch_size, path)
 
     def increase_size(self, increase_factor):
         # first data
-        self.dataset[self.current_task][1] = torch.cat([self.dataset[self.current_task][1]]*increase_factor, 0)
+        self.dataset[self.current_task][1] = torch.cat([self.dataset[self.current_task][1]] * increase_factor, 0)
         # then labels
-        self.dataset[self.current_task][2] = torch.cat([self.dataset[self.current_task][2]]*increase_factor, 0)
+        self.dataset[self.current_task][2] = torch.cat([self.dataset[self.current_task][2]] * increase_factor, 0)
 
         return self
 
@@ -236,7 +233,7 @@ class Dataset_Loader(data.Dataset):
     def delete_class(self, class_ind):
         # select all the classes differnet to ind_class
         indices = torch.nonzero(self.dataset[self.current_task][2] != class_ind)
-        indices=indices.reshape(-1)
+        indices = indices.reshape(-1)
 
         # keep only those indices
         self.dataset[self.current_task][1] = self.dataset[self.current_task][1][indices]
@@ -246,4 +243,3 @@ class Dataset_Loader(data.Dataset):
         # keep only those indices
         self.dataset[ind_task][1] = []
         self.dataset[ind_task][2] = []
-

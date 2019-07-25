@@ -1,4 +1,4 @@
-from ..data_loader import Dataset_Loader
+from ..data_loader import DatasetLoader
 import torch
 import pytest
 from torch.utils import data
@@ -20,7 +20,7 @@ def get_fake_dataset():
 
 def test_DataLoader_init(get_fake_dataset):
     fake_dataset = get_fake_dataset
-    dataset = Dataset_Loader(fake_dataset)
+    dataset = DatasetLoader(fake_dataset)
     assert dataset.current_task == 0
 
 
@@ -31,7 +31,7 @@ def test_DataLoader_init_label_is_dict(get_fake_dataset):
     :return:
     """
     fake_dataset = get_fake_dataset
-    dataset = Dataset_Loader(fake_dataset)
+    dataset = DatasetLoader(fake_dataset)
     assert isinstance(dataset.labels, dict)
 
 def test_DataLoader_init_label_size(get_fake_dataset):
@@ -41,7 +41,7 @@ def test_DataLoader_init_label_size(get_fake_dataset):
     :return:
     """
     fake_dataset = get_fake_dataset
-    dataset = Dataset_Loader(fake_dataset)
+    dataset = DatasetLoader(fake_dataset)
     assert len(dataset.labels) == dataset_size
 
 
@@ -49,7 +49,7 @@ def test_DataLoader_init_label_size(get_fake_dataset):
 @pytest.mark.parametrize("init_current_task", [0, 1, 2])
 def test_DataLoader_init_current_task(get_fake_dataset, init_current_task):
     fake_dataset = get_fake_dataset
-    dataset = Dataset_Loader(fake_dataset, current_task=init_current_task)
+    dataset = DatasetLoader(fake_dataset, current_task=init_current_task)
     assert dataset.current_task == init_current_task
 
 def test_DataLoader_with_torch(get_fake_dataset):
@@ -59,7 +59,7 @@ def test_DataLoader_with_torch(get_fake_dataset):
     :return:
     """
     fake_dataset = get_fake_dataset
-    dataset = Dataset_Loader(fake_dataset)
+    dataset = DatasetLoader(fake_dataset)
     train_loader = data.DataLoader(dataset, batch_size=10, shuffle=True, num_workers=6)
 
     for t, (batch, label) in enumerate(train_loader):
@@ -72,7 +72,7 @@ def test_DataLoader_with_torch_loader(get_fake_dataset):
     :return:
     """
     fake_dataset = get_fake_dataset
-    dataset = Dataset_Loader(fake_dataset)
+    dataset = DatasetLoader(fake_dataset)
     train_loader = data.DataLoader(dataset, batch_size=10, shuffle=True, num_workers=6)
 
     for t, (batch, label) in enumerate(train_loader):

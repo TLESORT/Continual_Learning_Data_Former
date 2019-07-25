@@ -1,4 +1,4 @@
-from ..data_loader import Dataset_Loader
+from ..data_loader import DatasetLoader
 import torch
 import pytest
 import os
@@ -10,7 +10,7 @@ import os
 def test_disjoint_samples_train_10_tasks(dataset, ind_task):
     path = "../Archives/Data/Tasks/{}/disjoint_10_train.pt".format(dataset)
     data = torch.load(path)
-    data_set = Dataset_Loader(data, current_task=0, transform=None, load_images=False, path=None)
+    data_set = DatasetLoader(data, current_task=0, transform=None, load_images=False, path=None)
 
     data_set.set_task(ind_task)
 
@@ -30,7 +30,7 @@ def test_disjoint_samples_train_10_tasks(dataset, ind_task):
 def test_disjoint_samples_train_5_tasks(task, dataset, ind_task):
     path = "../Archives/Data/Tasks/{}/{}_5_train.pt".format(dataset, task)
     data = torch.load(path)
-    data_set = Dataset_Loader(data, current_task=0, transform=None, load_images=False, path=None)
+    data_set = DatasetLoader(data, current_task=0, transform=None, load_images=False, path=None)
 
     data_set.set_task(ind_task)
     folder = "./Samples/5_tasks/"
@@ -50,7 +50,7 @@ def test_disjoint_samples_train_5_tasks(task, dataset, ind_task):
 def test_disjoint_samples_mnist_fellowship(ind_task):
     path = "../Archives/Data/Tasks/mnist_fellowship/mnist_fellowship_3_train.pt"
     data = torch.load(path)
-    data_set = Dataset_Loader(data, current_task=0, transform=None, load_images=False, path=None)
+    data_set = DatasetLoader(data, current_task=0, transform=None, load_images=False, path=None)
 
     data_set.set_task(ind_task)
     folder = "./Samples/mnist_fellowship/"
@@ -75,7 +75,7 @@ def test_disjoint_samples_disjoint_classes_permutations(ind_task, dataset):
 
     path = "../Archives/Data/Tasks/{}/disjoint_{}_10_train.pt".format(dataset, name)
     data = torch.load(path)
-    data_set = Dataset_Loader(data, current_task=0, transform=None, load_images=False, path=None)
+    data_set = DatasetLoader(data, current_task=0, transform=None, load_images=False, path=None)
 
     data_set.set_task(ind_task)
     folder = "./Samples/dijsoint_classes_permutations/"
@@ -93,7 +93,7 @@ def test_disjoint_samples_disjoint_rotation(ind_task, dataset):
 
     path = "../Archives/Data/Tasks/{}/disjoint_rotation_30_train.pt".format(dataset)
     data = torch.load(path)
-    data_set = Dataset_Loader(data, current_task=0, transform=None, load_images=False, path=None)
+    data_set = DatasetLoader(data, current_task=0, transform=None, load_images=False, path=None)
 
     data_set.set_task(ind_task)
 

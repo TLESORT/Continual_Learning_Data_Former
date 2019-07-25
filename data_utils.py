@@ -127,16 +127,7 @@ def visualize_batch(batch, number, shape, path):
         save_images(data_np[:image_frame_dim * image_frame_dim, :, :, :], [image_frame_dim, image_frame_dim],
                     path)
     elif shape[2] == 3:
-        # data = data.numpy().reshape(number, shape[0], shape[1], shape[2])
-        # if self.dataset_name == 'cifar10':
         data = batch.numpy().reshape(number, shape[2], shape[1], shape[0])
-        # data = data.numpy().reshape(number, shape[0], shape[1], shape[2])
-
-        # remap between 0 and 1
-        # data = data - data.min()
-        # data = data / data.max()
-
-        data = data / 2 + 0.5  # unnormalize
         make_samples_batche(data[:number], number, path)
     else:
         save_images(batch[:image_frame_dim * image_frame_dim, :, :, :], [image_frame_dim, image_frame_dim],
@@ -202,12 +193,3 @@ def make_samples_batche(prediction, batch_size, filename_dest):
     fig.savefig(filename_dest, bbox_inches='tight', pad_inches=0)
     plt.close(fig)
     plt.close()
-
-
-
-def generate_animation(path, num):
-    images = []
-    for e in range(num):
-        img_name = path + '_epoch%03d' % (e + 1) + '.png'
-        images.append(imageio.imread(img_name))
-    imageio.mimsave(path + '_generate_animation.gif', images, fps=5)

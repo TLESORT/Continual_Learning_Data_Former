@@ -1,7 +1,4 @@
-import argparse
-import os.path
 import torch
-import numpy as np
 
 try:
     from data_utils import load_data, normalize_data, check_and_Download_data
@@ -51,7 +48,7 @@ class Mnist_fellowship(Sequence_Former):
         elif ind_task == 2:  # kmnist
             self.dataset = 'kmnist'
 
-        # we reload a new dataset for each task
+        # we load a new dataset for each task
         x_tr, y_tr, x_te, y_te = load_data(self.dataset, self.i, self.imageSize, self.path_only)
 
         return super().create_task(ind_task, x_tr, y_tr, x_te, y_te)

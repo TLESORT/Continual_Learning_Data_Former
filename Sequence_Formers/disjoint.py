@@ -1,13 +1,10 @@
-import argparse
-import os.path
-import torch
 try:
     from data_utils import load_data, normalize_data, check_and_Download_data
     from Sequence_Formers.sequence_former import Sequence_Former
 except:
     from ..data_utils import load_data, normalize_data, check_and_Download_data
     from ..Sequence_Formers.sequence_former import Sequence_Former
-from copy import deepcopy
+
 
 """
 Scenario : each new classes gives never seen new classes to learn. The code here allows to choose in how many task we

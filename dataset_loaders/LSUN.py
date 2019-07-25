@@ -24,13 +24,9 @@ def load_LSUN():
     data_size = 100000
     test_size = 1000
 
-    # tensor_data = torch.Tensor(len(dataset_train), 3, 64, 64)
-    # tensor_label = torch.LongTensor(len(dataset_train))
     tensor_data = torch.Tensor(data_size, 3, 64, 64)
     tensor_label = torch.LongTensor(data_size)
 
-    # tensor_test = torch.Tensor(len(dataset_test), 3, 64, 64)
-    # tensor_label_test = torch.LongTensor(len(dataset_test))
     tensor_test = torch.Tensor(test_size, 3, 64, 64)
     tensor_label_test = torch.LongTensor(test_size)
 
@@ -42,6 +38,5 @@ def load_LSUN():
         tensor_test[i] = dataset_test[i][0]
         tensor_label_test[i] = dataset_test[i][1]
 
-    # testloader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False, num_workers=2)
 
     return tensor_data, tensor_label, tensor_test, tensor_label_test

@@ -104,4 +104,19 @@ data_set.set_task(2)
 for t, (data, target) in enumerate(train_loader):
     print(target)
 
-'''
+```
+
+
+### Citing the Project
+
+```
+@misc{stable-baselines,
+  author = {Lesort, Timothée},
+  title = {Continual Learning Data Former},
+  year = {2019},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/TLESORT/Continual_Learning_Data_Former}},
+}
+
+```

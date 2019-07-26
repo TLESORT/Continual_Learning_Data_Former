@@ -30,29 +30,29 @@ Some supplementary option are possible:
 
 ### Few possible commands
 
-*   Disjoint tasks
+-   Disjoint tasks
 
-```
+```python
 #MNIST with 10 tasks of one class
 python main.py --dataset MNIST --task disjoint --n_tasks 10 --dir ./Archives
 ```
-*   Rotations tasks
+-   Rotations tasks
 
-```
+```python
 #MNIST with 5 tasks with various rotations
 python main.py --dataset MNIST --task rotations --n_tasks 5 --min_rot 0 --max_rot 90 --dir ./Archives
 ```
 
-*   Permutations tasks
+-   Permutations tasks
 
-```
+```python
 #MNIST with 10 tasks of one class
 python main.py --dataset MNIST --task permutations --n_tasks 5 --dir ./Archives
 ```
 
-*   Dijsoint_classes_permutations tasks
+-   Dijsoint_classes_permutations tasks
 
-```
+```python
 #MNIST with 10 tasks of one class
 python main.py --dataset MNIST --task dijsoint_classes_permutations --n_tasks 10 --index_permutation 2 --dir ./Archives
 ```

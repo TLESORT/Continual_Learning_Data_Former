@@ -1,4 +1,3 @@
-import argparse
 import os.path
 import torch
 try:
@@ -7,9 +6,9 @@ except:
     from ..data_utils import load_data, check_and_Download_data
 from copy import deepcopy
 
-"""
+'''
 Parent Class for Sequence Formers 
-"""
+'''
 
 class Sequence_Former(object):
     def __init__(self, args):

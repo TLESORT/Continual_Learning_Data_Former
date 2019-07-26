@@ -30,7 +30,7 @@ def check_args(args):
     if args.dataset == 'MNIST' or args.dataset == 'fashion' or args.dataset == 'mnishion' or args.task == "mnist_fellowship":
         args.imageSize = 28
         args.img_channels = 1
-    elif args.dataset == 'cifar100' or args.dataset == 'cifar100':
+    elif args.dataset == 'cifar10' or args.dataset == 'cifar100':
         args.imageSize = 32
         args.img_channels = 3
     elif args.dataset == 'core10' or args.dataset == 'core50':

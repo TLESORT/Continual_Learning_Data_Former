@@ -1,12 +1,11 @@
-
 import matplotlib as mpl
 
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 
-
 import torch
 import os
+
 try:
     from .dataset_loaders.LSUN import load_LSUN
     from .dataset_loaders.cifar10 import load_Cifar10
@@ -20,11 +19,11 @@ except:
     from dataset_loaders.fashion import fashion
     from dataset_loaders.kmnist import kmnist
 
-
 from torchvision import datasets, transforms
 
 import numpy as np
 import imageio
+
 
 def check_args(args):
     if args.dataset == 'MNIST' or args.dataset == 'fashion' or args.dataset == 'mnishion' or args.task == "mnist_fellowship":
@@ -48,7 +47,6 @@ def check_args(args):
 
 
 def check_and_Download_data(folder, dataset, task):
-
     # download data if possible
     if dataset == 'MNIST' or dataset == 'mnishion' or task == "mnist_fellowship":
         datasets.MNIST(folder, train=True, download=True, transform=transforms.ToTensor())
@@ -66,9 +64,8 @@ def check_and_Download_data(folder, dataset, task):
         if not os.path.isdir(folder):
             print('This dataset should be downloaded manually')
 
+
 def load_data(dataset, path2data, imageSize=32, path_only=False):
-
-
     if dataset == 'cifar10':
         x_tr, y_tr, x_te, y_te = load_Cifar10(path2data)
         print(x_tr.shape)
@@ -90,11 +87,14 @@ def load_data(dataset, path2data, imageSize=32, path_only=False):
         return None, None, None, None
     else:
 
-        train_file = os.path.join(path2data, dataset, "processed",'training.pt')
-        test_file = os.path.join(path2data, dataset, "processed",'test.pt')
+        train_file = os.path.join(path2data, dataset, "processed", 'training.pt')
+        test_file = os.path.join(path2data, dataset, "processed", 'test.pt')
 
-        assert os.path.isfile(train_file), print("Missing file : {}".format(train_file))
-        assert os.path.isfile(test_file), print("Missing file : {}".format(test_file))
+        if not os.path.isfile(train_file):
+            raise AssertionError("Missing file : {}".format(train_file))
+
+        if not os.path.isfile(test_file):
+            raise AssertionError("Missing file : {}".format(test_file))
 
         x_tr, y_tr = torch.load(train_file)
         x_te, y_te = torch.load(test_file)
@@ -107,9 +107,9 @@ def load_data(dataset, path2data, imageSize=32, path_only=False):
 
     return x_tr, y_tr, x_te, y_te
 
+
 def visualize_batch(batch, number, shape, path):
     batch = batch.cpu().data
-
 
     image_frame_dim = int(np.floor(np.sqrt(number)))
 
@@ -125,7 +125,6 @@ def visualize_batch(batch, number, shape, path):
                     path)
 
 
-
 def save_images(images, size, image_path):
     return imsave(images, size, image_path)
 
@@ -133,6 +132,7 @@ def save_images(images, size, image_path):
 def imsave(images, size, path):
     image = np.squeeze(merge(images, size))
     return imageio.imwrite(path, image)
+
 
 def merge(images, size):
     h, w = images.shape[1], images.shape[2]
@@ -155,8 +155,6 @@ def merge(images, size):
         raise ValueError('in merge(images,size) images parameter ''must have dimensions: HxW or HxWx3 or HxWx4')
 
 
-
-
 def img_stretch(img):
     img = img.astype(float)
     img -= np.min(img)
@@ -165,7 +163,6 @@ def img_stretch(img):
 
 
 def make_samples_batche(prediction, batch_size, filename_dest):
-
     plt.figure()
     batch_size_sqrt = int(np.sqrt(batch_size))
     input_channel = prediction[0].shape[0]

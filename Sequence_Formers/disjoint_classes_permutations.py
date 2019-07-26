@@ -31,7 +31,8 @@ class Disjoint_classes_permutations(Disjoint):
 
     def select_index(self, ind_task, y):
 
-        assert self.n_tasks == self.num_classes, print("Other cases are not implemented yet")
+        if not self.n_tasks == self.num_classes:
+            raise AssertionError("Other cases are not implemented yet")
 
         class_min = ind_task
         class_max = ind_task + 1

@@ -12,11 +12,14 @@ Scenario : in this scenario we learn classes one by one first with MNIST and the
 class Disjoint_mnishion(Sequence_Former):
     def __init__(self, args):
         super(Disjoint_mnishion, self).__init__(args)
-        assert self.n_tasks == 20
+
+        if not self.n_tasks == 20:
+            raise AssertionError("Wrong number of tasks for this experiment")
 
     def select_index(self, ind_task, y):
 
-        assert self.num_classes == 10
+        if not self.num_classes == 10:
+            raise AssertionError("Wrong number of classes for this experiment")
 
         class_min = ind_task % self.num_classes
         class_max = class_min + 1

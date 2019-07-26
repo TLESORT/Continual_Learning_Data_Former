@@ -58,10 +58,14 @@ def test_disjoint_vanilla(tmpdir, get_args, dataset, n_tasks):
     Data_Former.formating_data()
 
     filename =  "disjoint_{}_{}.pt".format(n_tasks,"train")
-    assert os.path.isfile(os.path.join(tmpdir,"Data","Tasks",dataset,filename))
+
+    if not os.path.isfile(os.path.join(tmpdir,"Data","Tasks",dataset,filename)):
+        raise AssertionError("Test fail with train file")
 
     filename =  "disjoint_{}_{}.pt".format(n_tasks,"valid")
-    assert os.path.isfile(os.path.join(tmpdir,"Data","Tasks",dataset,filename))
+    if not os.path.isfile(os.path.join(tmpdir,"Data","Tasks",dataset,filename)):
+        raise AssertionError("Test fail with valid file")
 
     filename =  "disjoint_{}_{}.pt".format(n_tasks,"test")
-    assert os.path.isfile(os.path.join(tmpdir,"Data","Tasks",dataset,filename))
+    if not os.path.isfile(os.path.join(tmpdir,"Data","Tasks",dataset,filename)):
+        raise AssertionError("Test fail with test file")

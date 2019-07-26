@@ -20,7 +20,8 @@ class Disjoint(Sequence_Former):
     def select_index(self, ind_task, y):
         cpt = int(self.num_classes / self.n_tasks)
 
-        assert cpt > 0
+        if not cpt > 0:
+            raise AssertionError("Cpt can't be equal to zero for selection of classes")
 
         class_min = ind_task * cpt
         class_max = (ind_task + 1) * cpt

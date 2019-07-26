@@ -13,7 +13,8 @@ class Mnist_fellowship(Sequence_Former):
 
         self.disjoint_classes = args.disjoint_classes
 
-        assert self.num_classes == 10
+        if not self.num_classes == 10:
+            raise AssertionError("Wrong number of classes for this experiment")
 
     def select_index(self, ind_task, y):
 

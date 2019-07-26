@@ -175,6 +175,9 @@ def read_image_file(path):
                 for c in range(num_cols):
                     row.append(parse_byte(data[idx]))
                     idx += 1
-        assert len(images) == length
+
+        if not len(images) == length:
+            raise AssertionError("Wrong number of images")
+
     return torch.ByteTensor(images).view(-1, 28, 28)
 

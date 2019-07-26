@@ -4,11 +4,11 @@ import numpy as np
 
 
 def load_data(path, imageSize, path_only=False):
-
     if path_only:
         return load_path(path)
     else:
         return load_both(path, imageSize)
+
 
 def load_path(path):
     path_tr = np.load(path)['paths']
@@ -17,6 +17,7 @@ def load_path(path):
     y_tr = torch.Tensor(y_tr)
     return path_tr, y_tr
 
+
 def load_both(path, imageSize):
     x_tr = np.load(path)['x']
     y_tr = np.load(path)['y']
@@ -24,8 +25,8 @@ def load_both(path, imageSize):
     x_tr = x_tr.reshape((-1, imageSize, imageSize, 3))
     y_tr = y_tr.reshape((-1))
 
-
-    assert x_tr.shape[0] == y_tr.shape[0]
+    if not x_tr.shape[0] == y_tr.shape[0]:
+        raise AssertionError("There is something wrong here")
 
     ## AS FOR CIFAR10 WE DO mean 0.5 and std 0.5
 
@@ -52,7 +53,6 @@ def load_both(path, imageSize):
 
 
 def load_core50(path, imageSize=32, path_only=False):
-
     if path_only:
         path_train = os.path.join(path, 'core50_paths_train.npz')
         path_test = os.path.join(path, 'core50_paths_test.npz')
@@ -64,4 +64,3 @@ def load_core50(path, imageSize=32, path_only=False):
     x_te, y_te = load_data(path_test, imageSize, path_only)
 
     return x_tr, y_tr, x_te, y_te
-

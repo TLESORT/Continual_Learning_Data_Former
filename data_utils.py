@@ -107,15 +107,6 @@ def load_data(dataset, path2data, imageSize=32, path_only=False):
 
     return x_tr, y_tr, x_te, y_te
 
-
-
-def normalize_data(dataset, data):
-
-    if dataset == "mnist" or dataset == "fashion" or dataset == "kmnist":
-        pass
-
-    return data
-
 def visualize_batch(batch, number, shape, path):
     batch = batch.cpu().data
 

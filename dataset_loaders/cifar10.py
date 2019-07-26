@@ -24,7 +24,7 @@ def load_Cifar10(path):
     tensor_test = torch.Tensor(len(dataset_test), 3, 32, 32)
     tensor_label_test = torch.LongTensor(len(dataset_test))
 
-    for i, (data, label) in range(len(dataset_test)):
+    for i, (data, label) in enumerate(dataset_test):
         tensor_test[i] = data
         tensor_label_test[i] = label
 

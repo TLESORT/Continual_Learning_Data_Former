@@ -2,9 +2,9 @@ import argparse
 import os.path
 import torch
 try:
-    from data_utils import load_data, normalize_data, check_and_Download_data
+    from data_utils import load_data, check_and_Download_data
 except:
-    from ..data_utils import load_data, normalize_data, check_and_Download_data
+    from ..data_utils import load_data, check_and_Download_data
 from copy import deepcopy
 
 """
@@ -96,9 +96,6 @@ class Sequence_Former(object):
         _, _, i_te = self.select_index(ind_task, y_te)
 
         i_tr, i_va = self.get_valid_ind(i_tr)
-
-        x_tr = normalize_data(self.dataset, x_tr)
-        x_te = normalize_data(self.dataset, x_te)
 
         x_tr_t = self.transformation(ind_task, x_tr[i_tr])
         x_va_t = self.transformation(ind_task, x_tr[i_va])

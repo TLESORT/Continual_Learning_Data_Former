@@ -71,7 +71,7 @@ def test_DataLoader_with_torch(get_fake_dataset):
     dataset = DatasetLoader(fake_dataset)
     train_loader = data.DataLoader(dataset, batch_size=10, shuffle=True, num_workers=6)
 
-    for t, (batch, label) in enumerate(train_loader):
+    for _, (_, _) in enumerate(train_loader):
         break
 
 def test_DataLoader_with_torch_loader(get_fake_dataset):
@@ -84,7 +84,7 @@ def test_DataLoader_with_torch_loader(get_fake_dataset):
     dataset = DatasetLoader(fake_dataset)
     train_loader = data.DataLoader(dataset, batch_size=10, shuffle=True, num_workers=6)
 
-    for t, (batch, label) in enumerate(train_loader):
+    for _, (batch, label) in enumerate(train_loader):
 
         if not isinstance(label, torch.LongTensor):
             raise AssertionError("Test fail")

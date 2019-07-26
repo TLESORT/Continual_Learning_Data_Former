@@ -1,8 +1,8 @@
 try:
-    from data_utils import load_data, check_and_Download_data
+    from data_utils import load_data
     from Sequence_Formers.sequence_former import Sequence_Former
 except:
-    from ..data_utils import load_data, check_and_Download_data
+    from ..data_utils import load_data
 
 """
 Scenario : in this scenario we learn classes one by one first with MNIST and then with fashion-MNIST

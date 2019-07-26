@@ -67,8 +67,8 @@ class DatasetLoader(data.Dataset):
 
         return X, y
 
-    def __iter__(self):
-        return self
+    # def __iter__(self):
+    #     return self
 
     def next(self):
         return self.__next__()

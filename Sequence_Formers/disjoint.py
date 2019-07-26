@@ -1,7 +1,7 @@
 try:
     from Sequence_Formers.sequence_former import Sequence_Former
 except:
-    from .Sequence_Formers.sequence_former import Sequence_Former
+    from ..Sequence_Formers.sequence_former import Sequence_Former
 
 
 """

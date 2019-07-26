@@ -26,7 +26,7 @@ import imageio
 
 
 def check_args(args):
-    if args.dataset == 'MNIST' or args.dataset == 'fashion' or args.dataset == 'mnishion' or args.task == "mnist_fellowship":
+    if args.dataset == 'MNIST' or args.dataset == 'fashion' or args.dataset == 'kmnist' or args.dataset == 'mnishion' or args.task == "mnist_fellowship":
         args.imageSize = 28
         args.img_channels = 1
     elif args.dataset == 'cifar10' or args.dataset == 'cifar100':
@@ -51,10 +51,10 @@ def check_and_Download_data(folder, dataset, task):
     if dataset == 'MNIST' or dataset == 'mnishion' or task == "mnist_fellowship":
         datasets.MNIST(folder, train=True, download=True, transform=transforms.ToTensor())
     if dataset == 'fashion' or dataset == 'mnishion' or task == "mnist_fellowship":
-        fashion(os.path.join(folder, "fashion"), train=True, download=True, transform=transforms.ToTensor())
+        Fashion(os.path.join(folder, "fashion"), train=True, download=True, transform=transforms.ToTensor())
     # download data if possible
     if dataset == 'kmnist' or task == "mnist_fellowship":
-        kmnist(os.path.join(folder, "kmnist"), train=True, download=True, transform=transforms.ToTensor())
+        Kmnist(os.path.join(folder, "kmnist"), train=True, download=True, transform=transforms.ToTensor())
     if dataset == 'cifar100':
         train_file = 'cifar100.pt'
         if not os.path.isdir(folder):

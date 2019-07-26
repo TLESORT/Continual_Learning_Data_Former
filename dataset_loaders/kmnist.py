@@ -1,5 +1,10 @@
 from __future__ import print_function
-from dataset_loaders.fashion import Fashion
+
+try:
+    from dataset_loaders.fashion import Fashion
+except:
+    from ..dataset_loaders.fashion import Fashion
+
 
 
 class Kmnist(Fashion):

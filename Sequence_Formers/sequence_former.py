@@ -74,7 +74,8 @@ class Sequence_Former(object):
         """
         return label
 
-    def get_valid_ind(self, i_tr):
+    @staticmethod
+    def get_valid_ind(i_tr):
         # it is time to taxe train for validation
         len_valid = int(len(i_tr) * 0.2)
         indices = torch.randperm(len(i_tr))

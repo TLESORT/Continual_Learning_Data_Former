@@ -5,14 +5,13 @@ Scenario : we have several disjoint sequence but each sequence is rotated a bit
 This scenario test algorithms when there are both partially disjoint tasks and concept drift.
 """
 
+
 class Disjoint_rotation(Rotations):
     def __init__(self, args):
         super(Disjoint_rotation, self).__init__(args)
         self.number_rotation = 3
 
-
-
-        assert self.num_classes*self.number_rotation == self.n_tasks
+        assert self.num_classes * self.number_rotation == self.n_tasks
 
     def transformation(self, ind_task, data):
         """
@@ -24,9 +23,9 @@ class Disjoint_rotation(Rotations):
 
         ind_rotation = ind_task // self.num_classes
 
-        delta_rot = 1.0*(self.max_rot - self.min_rot) / self.number_rotation
+        delta_rot = 1.0 * (self.max_rot - self.min_rot) / self.number_rotation
 
-        noise = 1.0*delta_rot / 10.0
+        noise = 1.0 * delta_rot / 10.0
 
         min_rot = self.min_rot + (delta_rot * ind_rotation) - noise
         max_rot = self.min_rot + (delta_rot * ind_rotation) + noise
@@ -37,7 +36,6 @@ class Disjoint_rotation(Rotations):
         return data
 
     def select_index(self, ind_task, y):
-
         # remap index between 0 and self.num_classes -1
         ind_selection = ind_task % self.num_classes
 
@@ -45,4 +43,3 @@ class Disjoint_rotation(Rotations):
         class_max = ind_selection + 1
 
         return class_min, class_max, ((y >= class_min) & (y < class_max)).nonzero().view(-1)
-

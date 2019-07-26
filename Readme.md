@@ -32,27 +32,27 @@ Some supplementary option are possible:
 
 -   Disjoint tasks
 
-```python
+```bash
 #MNIST with 10 tasks of one class
 python main.py --dataset MNIST --task disjoint --n_tasks 10 --dir ./Archives
 ```
 -   Rotations tasks
 
-```python
+```bash
 #MNIST with 5 tasks with various rotations
 python main.py --dataset MNIST --task rotations --n_tasks 5 --min_rot 0 --max_rot 90 --dir ./Archives
 ```
 
 -   Permutations tasks
 
-```python
+```bash
 #MNIST with 10 tasks of one class
 python main.py --dataset MNIST --task permutations --n_tasks 5 --dir ./Archives
 ```
 
 -   Dijsoint_classes_permutations tasks
 
-```python
+```bash
 #MNIST with 10 tasks of one class
 python main.py --dataset MNIST --task dijsoint_classes_permutations --n_tasks 10 --index_permutation 2 --dir ./Archives
 ```

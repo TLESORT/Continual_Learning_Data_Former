@@ -1,11 +1,8 @@
-
-
 import torch
 from torchvision import datasets, transforms
 
 
 def load_LSUN():
-
     transform = transforms.Compose([
         transforms.Resize((64, 64)),
         transforms.ToTensor(),
@@ -37,6 +34,5 @@ def load_LSUN():
     for i in range(test_size):
         tensor_test[i] = dataset_test[i][0]
         tensor_label_test[i] = dataset_test[i][1]
-
 
     return tensor_data, tensor_label, tensor_test, tensor_label_test

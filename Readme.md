@@ -2,65 +2,62 @@
 
 
 
-# Continual Data Former
+## Continual Data Former
 
 This repositery proprose several script to create sequence of tasks for continual learning
 
 The following type of sequence are possible :
 
-- Disjoint tasks : each task propose new classes
-- Rotations tasks : each tasks propose same data but with different rotations of datata point
-- Permutations tasks : each tasks propose same data but with different permutations of pixels
-- Mnist Fellowship task : each task is a new mnist like dataset (this sequence of task is an original contribution of this repository)
+-   Disjoint tasks : each task propose new classes
+-   Rotations tasks : each tasks propose same data but with different rotations of datata point
+-   Permutations tasks : each tasks propose same data but with different permutations of pixels
+-   Mnist Fellowship task : each task is a new mnist like dataset (this sequence of task is an original contribution of this repository)
 
 Several dataset can be used :
 
-- Mnist
-- fashion-Mnist
-- kmnist
-- cifar10
-- mnishion : concatenation of Mnist and Fashion-Mnist
-- core50 (in developpment)
+-   Mnist
+-   fashion-Mnist
+-   kmnist
+-   cifar10
+-   mnishion : concatenation of Mnist and Fashion-Mnist
+-   core50 (in developpment)
 
 Some supplementary option are possible:
-- Class order can be shuffled for disjoint tasks
-- We can choose the magnitude of rotation for rotations mnist
-- Of course we can choose the number of tasks (1, 3, 5 and 10 have been tested normally)
+-   Class order can be shuffled for disjoint tasks
+-   We can choose the magnitude of rotation for rotations mnist
+-   Of course we can choose the number of tasks (1, 3, 5 and 10 have been tested normally)
 
 
-## Few possible commands
+### Few possible commands
 
-#### Disjoint tasks
+*   Disjoint tasks
 
 ```
 #MNIST with 10 tasks of one class
 python main.py --dataset MNIST --task disjoint --n_tasks 10 --dir ./Archives
 ```
-#### Rotations tasks
+*   Rotations tasks
 
 ```
 #MNIST with 5 tasks with various rotations
 python main.py --dataset MNIST --task rotations --n_tasks 5 --min_rot 0 --max_rot 90 --dir ./Archives
 ```
 
-#### Permutations tasks
+*   Permutations tasks
 
 ```
 #MNIST with 10 tasks of one class
 python main.py --dataset MNIST --task permutations --n_tasks 5 --dir ./Archives
 ```
 
-
-#### Dijsoint_classes_permutations tasks
+*   Dijsoint_classes_permutations tasks
 
 ```
 #MNIST with 10 tasks of one class
 python main.py --dataset MNIST --task dijsoint_classes_permutations --n_tasks 10 --index_permutation 2 --dir ./Archives
 ```
 
-
-
-## Example of use
+### Example of use
 
 ```python
 #MNIST with 10 tasks of one class
@@ -106,10 +103,9 @@ for t, (data, target) in enumerate(train_loader):
 
 ```
 
-
 ### Citing the Project
 
-```
+```Array.<string>
 @misc{continual-learning-data-former,
   author = {Lesort, Timothée},
   title = {Continual Learning Data Former},

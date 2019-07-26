@@ -8,7 +8,7 @@ import torch
 import codecs
 
 
-class fashion(data.Dataset):
+class Fashion(data.Dataset):
     """`Fashion-MNIST Dataset.
     Args:
         root (string): Root directory of dataset where ``processed/training.pt``
@@ -89,7 +89,7 @@ class fashion(data.Dataset):
                os.path.exists(os.path.join(self.root, self.processed_folder, self.test_file))
 
     def download(self):
-        """Download the MNIST data if it doesn't exist in processed_folder already."""
+        """Download the Fashion MNIST data if it doesn't exist in processed_folder already."""
         from six.moves import urllib
         import gzip
 
@@ -150,34 +150,37 @@ def parse_byte(b):
 def read_label_file(path):
     with open(path, 'rb') as f:
         data = f.read()
-        assert get_int(data[:4]) == 2049
+
+        if not get_int(data[:4]) == 2049:
+            raise AssertionError("Wong size data")
+
         length = get_int(data[4:8])
         labels = [parse_byte(b) for b in data[8:]]
-        assert len(labels) == length
+        if not len(labels) == length:
+            raise AssertionError("Wong size label")
         return torch.LongTensor(labels)
 
 
 def read_image_file(path):
     with open(path, 'rb') as f:
         data = f.read()
-        assert get_int(data[:4]) == 2051
+        if not get_int(data[:4]) == 2051:
+            raise AssertionError("Wong size data")
         length = get_int(data[4:8])
         num_rows = get_int(data[8:12])
         num_cols = get_int(data[12:16])
         images = []
         idx = 16
-        for l in range(length):
+        for _ in range(length):
             img = []
             images.append(img)
-            for r in range(num_rows):
+            for _ in range(num_rows):
                 row = []
                 img.append(row)
-                for c in range(num_cols):
+                for _ in range(num_cols):
                     row.append(parse_byte(data[idx]))
                     idx += 1
-
         if not len(images) == length:
-            raise AssertionError("Wrong number of images")
-
+            raise AssertionError("Wong size data")
     return torch.ByteTensor(images).view(-1, 28, 28)
 

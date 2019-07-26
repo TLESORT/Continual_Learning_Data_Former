@@ -10,14 +10,14 @@ try:
     from .dataset_loaders.LSUN import load_LSUN
     from .dataset_loaders.cifar10 import load_Cifar10
     from .dataset_loaders.core50 import load_core50
-    from .dataset_loaders.fashion import fashion
-    from .dataset_loaders.kmnist import kmnist
+    from .dataset_loaders.fashion import Fashion
+    from .dataset_loaders.kmnist import Kmnist
 except:
     from dataset_loaders.LSUN import load_LSUN
     from dataset_loaders.cifar10 import load_Cifar10
     from dataset_loaders.core50 import load_core50
-    from dataset_loaders.fashion import fashion
-    from dataset_loaders.kmnist import kmnist
+    from dataset_loaders.fashion import Fashion
+    from dataset_loaders.kmnist import Kmnist
 
 from torchvision import datasets, transforms
 

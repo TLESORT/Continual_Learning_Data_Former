@@ -1,7 +1,7 @@
 import torch
 
 try:
-    from data_utils import load_data, check_and_Download_data
+    from data_utils import load_data
     from Sequence_Formers.sequence_former import Sequence_Former
 except:
     from ..data_utils import load_data, check_and_Download_data

@@ -85,10 +85,10 @@ def load_data(dataset, path2data, imageSize=32, path_only=False):
         test_file = os.path.join(path2data, dataset, "processed", 'test.pt')
 
         if not os.path.isfile(train_file):
-            raise AssertionError("Missing file : {}".format(train_file))
+            raise AssertionError("Missing file: {}".format(train_file))
 
         if not os.path.isfile(test_file):
-            raise AssertionError("Missing file : {}".format(test_file))
+            raise AssertionError("Missing file: {}".format(test_file))
 
         x_tr, y_tr = torch.load(train_file)
         x_te, y_te = torch.load(test_file)

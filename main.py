@@ -2,7 +2,7 @@ import argparse
 import os
 
 from Sequence_Formers.disjoint import Disjoint
-from Sequence_Formers.disjoint_rotation import Disjoint_rotation
+from Sequence_Formers.disjoint_rotations import Disjoint_rotations
 from Sequence_Formers.disjoint_mnishion import Disjoint_mnishion
 from Sequence_Formers.Mnist_Fellowship import Mnist_fellowship
 from Sequence_Formers.rotations import Rotations
@@ -20,8 +20,8 @@ parser.add_argument('--i', default='Data', help='input directory')
 
 parser.add_argument('--index_permutation', default=None, type=int)
 parser.add_argument('--task', default='disjoint',
-                    choices=['rotations', 'permutations', 'disjoint_rotation', 'disjoint_mnishion',
-                             'disjoint', "mnist_fellowship", 'dijsoint_classes_permutations'],
+                    choices=['rotations', 'permutations', 'disjoint_rotations', 'disjoint_mnishion',
+                             'disjoint', "mnist_fellowship", 'disjoint_classes_permutations'],
                     help='type of task to create', )
 parser.add_argument('--dataset', default='MNIST', type=str,
                     choices=['MNIST', 'fashion', 'core50', 'cifar10', 'mnishion', "kmnist", "mnist_fellowship"])
@@ -69,11 +69,11 @@ elif args.task == 'disjoint':
     DataFormatter = Disjoint(args)
 elif args.task == 'mnist_fellowship':
     DataFormatter = Mnist_fellowship(args)
-elif args.task == 'disjoint_rotation':
-    DataFormatter = Disjoint_rotation(args)
+elif args.task == 'disjoint_rotations':
+    DataFormatter = Disjoint_rotations(args)
 elif args.task == 'disjoint_mnishion':
     DataFormatter = Disjoint_mnishion(args)
-elif args.task == 'dijsoint_classes_permutations':
+elif args.task == 'disjoint_classes_permutations':
     DataFormatter = Disjoint_classes_permutations(args)
 else:
     raise Exception("[!] There is no DataFormer  option for " + args.task)

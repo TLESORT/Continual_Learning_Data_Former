@@ -53,6 +53,8 @@ def load_both(path, imageSize):
 
 
 def load_core50(path, imageSize=32, path_only=False):
+    path = os.path.join(path, "core50", "processed")
+
     if path_only:
         path_train = os.path.join(path, 'core50_paths_train.npz')
         path_test = os.path.join(path, 'core50_paths_test.npz')

@@ -5,24 +5,24 @@ import matplotlib.pyplot as plt
 
 import torch
 import os
+from torchvision import datasets, transforms
 
-try:
-    from .dataset_loaders.LSUN import load_LSUN
-    from .dataset_loaders.cifar10 import load_Cifar10
-    from .dataset_loaders.core50 import load_core50
-    from .dataset_loaders.fashion import Fashion
-    from .dataset_loaders.kmnist import Kmnist
-except:
+import numpy as np
+import imageio
+
+if os.path.exists("dataset_loaders"):
     from dataset_loaders.LSUN import load_LSUN
     from dataset_loaders.cifar10 import load_Cifar10
     from dataset_loaders.core50 import load_core50
     from dataset_loaders.fashion import Fashion
     from dataset_loaders.kmnist import Kmnist
+else:
+    from .dataset_loaders.LSUN import load_LSUN
+    from .dataset_loaders.cifar10 import load_Cifar10
+    from .dataset_loaders.core50 import load_core50
+    from .dataset_loaders.fashion import Fashion
+    from .dataset_loaders.kmnist import Kmnist
 
-from torchvision import datasets, transforms
-
-import numpy as np
-import imageio
 
 
 def check_args(args):

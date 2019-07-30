@@ -2,6 +2,12 @@ import torch
 from Sequence_Formers.sequence_former import Sequence_Former
 from copy import deepcopy
 
+'''
+Scenario : In this scenario, for each tasks all classes are available, however for each task pixels are permutated.
+The goal is to test algorithms where all data for each classes are not available simultaneously and are available from
+ different mode of th distribution (different permutation modes).
+'''
+
 
 class Permutations(Sequence_Former):
 

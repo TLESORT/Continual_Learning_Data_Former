@@ -1,9 +1,9 @@
 import torch
 
-try:
+if os.path.exists("Sequence_Formers"):
     from data_utils import load_data
     from Sequence_Formers.sequence_former import Sequence_Former
-except:
+else:
     from ..data_utils import load_data
 
 

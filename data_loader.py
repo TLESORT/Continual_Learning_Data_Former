@@ -4,9 +4,9 @@ from copy import deepcopy
 from torch.utils import data
 import torchvision.transforms.functional as TF
 
-try:
+if os.path.exists("Sequence_Formers"):
     from data_utils import make_samples_batche, save_images
-except:
+else:
     from .data_utils import make_samples_batche, save_images
 from PIL import Image
 import os

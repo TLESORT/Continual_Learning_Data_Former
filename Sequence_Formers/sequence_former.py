@@ -63,6 +63,8 @@ class Sequence_Former(object):
         :param data: data to process
         :return: data post processing
         """
+        if not ind_task < self.num_classes:
+            raise AssertionError("Error in task indice")
         return deepcopy(data)
 
     def label_transformation(self, ind_task, label):
@@ -72,6 +74,8 @@ class Sequence_Former(object):
         :param label: label to process
         :return: data post processing
         """
+        if not ind_task < self.num_classes:
+            raise AssertionError("Error in task indice")
         return label
 
     @staticmethod

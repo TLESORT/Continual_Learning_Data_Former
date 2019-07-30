@@ -55,15 +55,9 @@ def check_and_Download_data(folder, dataset, task):
     # download data if possible
     if dataset == 'kmnist' or task == "mnist_fellowship":
         Kmnist(os.path.join(folder, "kmnist"), train=True, download=True, transform=transforms.ToTensor())
-    if dataset == 'cifar100':
-        train_file = 'cifar100.pt'
+    if dataset == 'core50':
         if not os.path.isdir(folder):
             print('This dataset should be downloaded manually')
-    if dataset == 'CUB200':
-        folder = os.path.join(folder, 'images')
-        if not os.path.isdir(folder):
-            print('This dataset should be downloaded manually')
-
 
 def load_data(dataset, path2data, imageSize=32, path_only=False):
     if dataset == 'cifar10':

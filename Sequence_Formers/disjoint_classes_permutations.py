@@ -3,9 +3,9 @@ import torch
 from Sequence_Formers.disjoint import Disjoint
 
 
-class Disjoint_classes_permutations(Disjoint):
+class DisjointClassesPermutations(Disjoint):
     def __init__(self, args):
-        super(Disjoint_classes_permutations, self).__init__(args)
+        super(DisjointClassesPermutations, self).__init__(args)
 
         # There are several possible permutation inside the permutation file, so we need to choose one
         self.index_permutation = args.index_permutation

@@ -1,7 +1,3 @@
-
-
-
-
 ## Continual Data Former
 
 This repositery proprose several script to create sequence of tasks for continual learning

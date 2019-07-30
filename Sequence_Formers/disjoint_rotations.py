@@ -1,14 +1,12 @@
 from Sequence_Formers.rotations import Rotations
 
-"""
-Scenario : we have several disjoint sequence but each sequence is rotated a bit  
-This scenario test algorithms when there are both partially disjoint tasks and concept drift.
-"""
 
+class DisjointRotations(Rotations):
+    """Scenario : we have several disjoint sequence but each sequence is rotated a bit
+    This scenario test algorithms when there are both partially disjoint tasks and concept drift."""
 
-class Disjoint_rotations(Rotations):
     def __init__(self, args):
-        super(Disjoint_rotations, self).__init__(args)
+        super(DisjointRotations, self).__init__(args)
         self.number_rotation = 3
 
         if not self.num_classes * self.number_rotation == self.n_tasks:

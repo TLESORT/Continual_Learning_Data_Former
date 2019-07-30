@@ -7,9 +7,9 @@ else:
     from ..data_utils import load_data
 
 
-class Mnist_fellowship(Sequence_Former):
+class MnistFellowship(Sequence_Former):
     def __init__(self, args):
-        super(Mnist_fellowship, self).__init__(args)
+        super(MnistFellowship, self).__init__(args)
 
         self.disjoint_classes = args.disjoint_classes
 

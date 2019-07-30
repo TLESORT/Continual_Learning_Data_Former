@@ -2,12 +2,12 @@ import argparse
 import os
 
 from Sequence_Formers.disjoint import Disjoint
-from Sequence_Formers.disjoint_rotations import Disjoint_rotations
-from Sequence_Formers.disjoint_mnishion import Disjoint_mnishion
-from Sequence_Formers.Mnist_Fellowship import Mnist_fellowship
+from Sequence_Formers.disjoint_rotations import DisjointRotations
+from Sequence_Formers.disjoint_mnishion import DisjointMnishion
+from Sequence_Formers.Mnist_Fellowship import MnistFellowship
 from Sequence_Formers.rotations import Rotations
 from Sequence_Formers.permutations import Permutations
-from Sequence_Formers.disjoint_classes_permutations import Disjoint_classes_permutations
+from Sequence_Formers.disjoint_classes_permutations import DisjointClassesPermutations
 
 from data_utils import check_args
 import numpy as np
@@ -68,13 +68,13 @@ elif args.task == 'permutations':
 elif args.task == 'disjoint':
     DataFormatter = Disjoint(args)
 elif args.task == 'mnist_fellowship':
-    DataFormatter = Mnist_fellowship(args)
+    DataFormatter = MnistFellowship(args)
 elif args.task == 'disjoint_rotations':
-    DataFormatter = Disjoint_rotations(args)
+    DataFormatter = DisjointRotations(args)
 elif args.task == 'disjoint_mnishion':
-    DataFormatter = Disjoint_mnishion(args)
+    DataFormatter = DisjointMnishion(args)
 elif args.task == 'disjoint_classes_permutations':
-    DataFormatter = Disjoint_classes_permutations(args)
+    DataFormatter = DisjointClassesPermutations(args)
 else:
     raise Exception("[!] There is no DataFormer  option for " + args.task)
 

@@ -1,7 +1,7 @@
 import pytest
 from Sequence_Formers.disjoint import Disjoint
 from Sequence_Formers.rotations import Rotations
-from Sequence_Formers.disjoint_rotations import Disjoint_rotations
+from Sequence_Formers.disjoint_rotations import DisjointRotations
 import os
 
 dataset_size = 100
@@ -102,7 +102,7 @@ def test_disjoint_rotations(tmpdir, get_args, dataset, n_tasks):
     args.set_paths()
     # no need to download the dataset again for this test (if it already exists)
     args.i = os.path.join(dir_archive, 'Data', 'Datasets')
-    Data_Former = Disjoint_rotations(args)
+    Data_Former = DisjointRotations(args)
     Data_Former.formating_data()
 
     check_task_sequences_files(args.task, tmpdir, n_tasks, dataset)

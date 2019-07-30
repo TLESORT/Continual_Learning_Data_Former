@@ -5,14 +5,13 @@ if os.path.exists("Sequence_Formers"):
 else:
     from ..data_utils import load_data
 
-"""
-Scenario : in this scenario we learn classes one by one first with MNIST and then with fashion-MNIST
-"""
 
 
-class Disjoint_mnishion(Sequence_Former):
+class DisjointMnishion(Sequence_Former):
+    """Scenario : in this scenario we learn classes one by one first with MNIST and then with fashion-MNIST"""
+
     def __init__(self, args):
-        super(Disjoint_mnishion, self).__init__(args)
+        super(DisjointMnishion, self).__init__(args)
 
         if not self.n_tasks == 20:
             raise AssertionError("Wrong number of tasks for this experiment")

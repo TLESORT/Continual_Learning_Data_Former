@@ -1,4 +1,4 @@
-from ..data_loader import DatasetLoader
+from data_loader import DatasetLoader
 import torch
 import pytest
 from torch.utils import data

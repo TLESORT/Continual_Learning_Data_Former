@@ -3,13 +3,13 @@ import numpy as np
 from copy import deepcopy
 from torch.utils import data
 import torchvision.transforms.functional as TF
+from PIL import Image
+import os
 
 if os.path.exists("Sequence_Formers"):
     from data_utils import make_samples_batche, save_images
 else:
     from .data_utils import make_samples_batche, save_images
-from PIL import Image
-import os
 
 
 class DatasetLoader(data.Dataset):

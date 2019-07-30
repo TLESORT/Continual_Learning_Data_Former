@@ -4,6 +4,8 @@
 
 ## Continual Data Former
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9273eb0f97b946308248b0007e054e54)](https://app.codacy.com/app/TLESORT/Continual_Learning_Data_Former?utm_source=github.com&utm_medium=referral&utm_content=TLESORT/Continual_Learning_Data_Former&utm_campaign=Badge_Grade_Dashboard)
+
 This repositery proprose several script to create sequence of tasks for continual learning
 
 The following type of sequence are possible :

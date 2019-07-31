@@ -2,16 +2,15 @@ import os.path
 import torch
 from copy import deepcopy
 
-if os.path.exists("Sequence_Formers"): # check if we are in the folder Continual_Learning_Data_Former
+if os.path.exists("Sequence_Formers"):  # check if we are in the folder Continual_Learning_Data_Former
     from data_utils import load_data, check_and_Download_data
 else:
     from ..data_utils import load_data, check_and_Download_data
 
-'''
-Parent Class for Sequence Formers 
-'''
 
 class Sequence_Former(object):
+    '''Parent Class for Sequence Formers'''
+
     def __init__(self, args):
         super(Sequence_Former, self).__init__()
 
@@ -22,28 +21,27 @@ class Sequence_Former(object):
         self.imageSize = args.imageSize
         self.img_channels = args.img_channels
         self.dataset = args.dataset
-        self.path_only = args.path_only # only valid for core50 at the moment
+        self.path_only = args.path_only  # only valid for core50 at the moment
         self.task = args.task
 
         # if self.path_only we don't load data but just path
         # data will be loaded online while learning
         # it is considered as light mode this continual dataset are easy to generate and load
         if self.path_only:
-            light_id='_light'
+            light_id = '_light'
         else:
-            light_id=''
+            light_id = ''
 
         if not os.path.exists(args.o):
             os.makedirs(args.o)
 
         self.o_train = os.path.join(self.o, '{}_{}_train{}.pt'.format(self.task, self.n_tasks, light_id))
         self.o_valid = os.path.join(self.o, '{}_{}_valid{}.pt'.format(self.task, self.n_tasks, light_id))
-        self.o_test = os.path.join(self.o,  '{}_{}_test{}.pt'.format(self.task, self.n_tasks, light_id))
+        self.o_test = os.path.join(self.o, '{}_{}_test{}.pt'.format(self.task, self.n_tasks, light_id))
 
-
-        self.o_train_full = os.path.join(self.o, '{}_1-{}_train{}.pt'.format(self.task, self.n_tasks,light_id))
-        self.o_valid_full = os.path.join(self.o, '{}_1-{}_valid{}.pt'.format(self.task, self.n_tasks,light_id))
-        self.o_test_full = os.path.join(self.o, '{}_1-{}_test{}.pt'.format(self.task, self.n_tasks,light_id))
+        self.o_train_full = os.path.join(self.o, '{}_1-{}_train{}.pt'.format(self.task, self.n_tasks, light_id))
+        self.o_valid_full = os.path.join(self.o, '{}_1-{}_valid{}.pt'.format(self.task, self.n_tasks, light_id))
+        self.o_test_full = os.path.join(self.o, '{}_1-{}_test{}.pt'.format(self.task, self.n_tasks, light_id))
 
         check_and_Download_data(self.i, self.dataset, task=self.task)
 
@@ -92,7 +90,6 @@ class Sequence_Former(object):
 
         return i_tr, i_va
 
-
     def create_task(self, ind_task, x_tr, y_tr, x_te, y_te):
 
         # select only the good classes
@@ -111,7 +108,6 @@ class Sequence_Former(object):
 
         return class_min, class_max, x_tr_t, y_tr_t, x_va_t, y_va_t, x_te_t, y_te_t
 
-
     def formating_data(self):
 
         # variable to save the sequence
@@ -119,14 +115,13 @@ class Sequence_Former(object):
         tasks_va = []
         tasks_te = []
 
-
         # variable to save the cumul of the sequence for upperbound
         tasks_tr_full = []
         tasks_va_full = []
         tasks_te_full = []
-        full_x_tr,  full_y_tr = None, None
-        full_x_va,  full_y_va = None, None
-        full_x_te,  full_y_te = None, None
+        full_x_tr, full_y_tr = None, None
+        full_x_va, full_y_va = None, None
+        full_x_te, full_y_te = None, None
 
         x_tr, y_tr, x_te, y_te = load_data(self.dataset, self.i, self.imageSize, self.path_only)
 
@@ -153,7 +148,6 @@ class Sequence_Former(object):
                 full_y_va = torch.cat([full_y_va, y_va_t], dim=0)
                 full_y_te = torch.cat([full_y_te, y_te_t], dim=0)
 
-
         if not self.path_only:
             print(tasks_tr[0][1].shape)
             print(tasks_tr[0][1].mean())
@@ -162,7 +156,6 @@ class Sequence_Former(object):
         torch.save(tasks_tr, self.o_train)
         torch.save(tasks_va, self.o_valid)
         torch.save(tasks_te, self.o_test)
-
 
         tasks_tr_full.append([(0, self.num_classes), full_x_tr, full_y_tr])
         tasks_va_full.append([(0, self.num_classes), full_x_va, full_y_va])

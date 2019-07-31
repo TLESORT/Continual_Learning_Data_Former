@@ -69,6 +69,8 @@ def test_download(tmpdir, get_args, dataset):
     args.set_paths()
     Data_Former = Disjoint(args)
 
+    if Data_Former is None:
+        raise AssertionError("Object construction has failed")
 
 # #@pytest.mark.parametrize("datasets", ["mnist", "fashion", "kmnist","cifar10","LSUN","core50"])
 @pytest.mark.slow

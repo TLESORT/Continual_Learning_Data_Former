@@ -24,11 +24,10 @@ It makes programming easier and code cleaner.
 -   mnishion : concatenation of Mnist and Fashion-Mnist
 -   core50 (in developpment)
 
-### Some supplementary option are possible:
+### Some supplementary option are possible
 -   The number of tasks can be choosed (1, 3, 5 and 10 have been tested normally)
 -   Classes order can be shuffled for disjoint tasks
 -   We can choose the magnitude of rotation for rotations mnist
-
 
 ### Few possible commands
 

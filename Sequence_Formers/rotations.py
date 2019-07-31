@@ -2,10 +2,10 @@ from torchvision import transforms
 import torch
 from Sequence_Formers.sequence_former import Sequence_Former
 
-'''
-Scenario : In this scenario, for each tasks all classes are available, however for each task data rotate a bit.
-The goal is to test algorithms where all data for each classes are not available simultaneously and there is a concept drift.
-'''
+'''Scenario : In this scenario, for each tasks all classes are available, however for each task data rotate a bit.
+The goal is to test algorithms where all data for each classes are not available simultaneously and there is a concept
+ drift.'''
+
 
 class Rotations(Sequence_Former):
     def __init__(self, args):
@@ -15,7 +15,6 @@ class Rotations(Sequence_Former):
         self.min_rot = args.min_rot
 
     def apply_rotation(self, data, min_rot, max_rot):
-
         transform = transforms.Compose(
             [transforms.RandomAffine(degrees=[min_rot, max_rot]),
              transforms.ToTensor()])
@@ -29,7 +28,6 @@ class Rotations(Sequence_Former):
         return result
 
     def transformation(self, ind_task, data):
-
         delta_rot = 1.0 * (self.max_rot - self.min_rot) / self.n_tasks
         noise = 1.0 * delta_rot / 10.0
 

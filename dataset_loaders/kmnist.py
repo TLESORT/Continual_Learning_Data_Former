@@ -1,8 +1,11 @@
 from __future__ import print_function
+import importlib
+import os
 
-try:
+# some kind of solution for imports pb from different starting point
+if os.path.exists("dataset_loaders"):
     from dataset_loaders.fashion import Fashion
-except:
+else:
     from ..dataset_loaders.fashion import Fashion
 
 

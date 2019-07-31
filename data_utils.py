@@ -5,24 +5,24 @@ import matplotlib.pyplot as plt
 
 import torch
 import os
+from torchvision import datasets, transforms
 
-try:
-    from .dataset_loaders.LSUN import load_LSUN
-    from .dataset_loaders.cifar10 import load_Cifar10
-    from .dataset_loaders.core50 import load_core50
-    from .dataset_loaders.fashion import Fashion
-    from .dataset_loaders.kmnist import Kmnist
-except:
+import numpy as np
+import imageio
+
+if os.path.exists("dataset_loaders"):
     from dataset_loaders.LSUN import load_LSUN
     from dataset_loaders.cifar10 import load_Cifar10
     from dataset_loaders.core50 import load_core50
     from dataset_loaders.fashion import Fashion
     from dataset_loaders.kmnist import Kmnist
+else:
+    from .dataset_loaders.LSUN import load_LSUN
+    from .dataset_loaders.cifar10 import load_Cifar10
+    from .dataset_loaders.core50 import load_core50
+    from .dataset_loaders.fashion import Fashion
+    from .dataset_loaders.kmnist import Kmnist
 
-from torchvision import datasets, transforms
-
-import numpy as np
-import imageio
 
 
 def check_args(args):
@@ -55,15 +55,9 @@ def check_and_Download_data(folder, dataset, task):
     # download data if possible
     if dataset == 'kmnist' or task == "mnist_fellowship":
         Kmnist(os.path.join(folder, "kmnist"), train=True, download=True, transform=transforms.ToTensor())
-    if dataset == 'cifar100':
-        train_file = 'cifar100.pt'
+    if dataset == 'core50':
         if not os.path.isdir(folder):
             print('This dataset should be downloaded manually')
-    if dataset == 'CUB200':
-        folder = os.path.join(folder, 'images')
-        if not os.path.isdir(folder):
-            print('This dataset should be downloaded manually')
-
 
 def load_data(dataset, path2data, imageSize=32, path_only=False):
     if dataset == 'cifar10':
@@ -91,10 +85,10 @@ def load_data(dataset, path2data, imageSize=32, path_only=False):
         test_file = os.path.join(path2data, dataset, "processed", 'test.pt')
 
         if not os.path.isfile(train_file):
-            raise AssertionError("Missing file : {}".format(train_file))
+            raise AssertionError("Missing file: {}".format(train_file))
 
         if not os.path.isfile(test_file):
-            raise AssertionError("Missing file : {}".format(test_file))
+            raise AssertionError("Missing file: {}".format(test_file))
 
         x_tr, y_tr = torch.load(train_file)
         x_te, y_te = torch.load(test_file)

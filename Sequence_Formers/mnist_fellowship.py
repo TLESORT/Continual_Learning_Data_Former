@@ -1,15 +1,15 @@
 import torch
 
-try:
+if os.path.exists("Sequence_Formers"):
     from data_utils import load_data
     from Sequence_Formers.sequence_former import Sequence_Former
-except:
+else:
     from ..data_utils import load_data
 
 
-class Mnist_fellowship(Sequence_Former):
+class MnistFellowship(Sequence_Former):
     def __init__(self, args):
-        super(Mnist_fellowship, self).__init__(args)
+        super(MnistFellowship, self).__init__(args)
 
         self.disjoint_classes = args.disjoint_classes
 

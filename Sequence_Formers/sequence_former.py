@@ -1,10 +1,11 @@
 import os.path
 import torch
-try:
-    from data_utils import load_data, check_and_Download_data
-except:
-    from ..data_utils import load_data, check_and_Download_data
 from copy import deepcopy
+
+if os.path.exists("Sequence_Formers"): # check if we are in the folder Continual_Learning_Data_Former
+    from data_utils import load_data, check_and_Download_data
+else:
+    from ..data_utils import load_data, check_and_Download_data
 
 '''
 Parent Class for Sequence Formers 
@@ -62,6 +63,8 @@ class Sequence_Former(object):
         :param data: data to process
         :return: data post processing
         """
+        if not ind_task < self.num_classes:
+            raise AssertionError("Error in task indice")
         return deepcopy(data)
 
     def label_transformation(self, ind_task, label):
@@ -71,6 +74,8 @@ class Sequence_Former(object):
         :param label: label to process
         :return: data post processing
         """
+        if not ind_task < self.num_classes:
+            raise AssertionError("Error in task indice")
         return label
 
     @staticmethod

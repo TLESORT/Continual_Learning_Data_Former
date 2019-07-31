@@ -1,17 +1,21 @@
-## Continual Data Former
+## Continual Learning Data Former
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9273eb0f97b946308248b0007e054e54)](https://app.codacy.com/app/TLESORT/Continual_Learning_Data_Former?utm_source=github.com&utm_medium=referral&utm_content=TLESORT/Continual_Learning_Data_Former&utm_campaign=Badge_Grade_Dashboard)
 
-This repositery proprose several script to create sequence of tasks for continual learning
+This repositery proprose several script to create sequence of tasks for continual learning. The spirit is the following : 
+Instead of managing the sequence of tasks while learning, we create the sequence of tasks first and then we load tasks 
+one by one while learning.
 
-The following type of sequence are possible :
+It makes programming easier and code cleaner.
 
--   Disjoint tasks : each task propose new classes
--   Rotations tasks : each tasks propose same data but with different rotations of datata point
--   Permutations tasks : each tasks propose same data but with different permutations of pixels
--   Mnist Fellowship task : each task is a new mnist like dataset (this sequence of task is an original contribution of this repository)
+### Task sequences possibilities
 
-Several dataset can be used :
+-   **Disjoint tasks** : each task propose new classes
+-   **Rotations tasks** : each tasks propose same data but with different rotations of datata point
+-   **Permutations tasks** : each tasks propose same data but with different permutations of pixels
+-   **Mnist Fellowship task** : each task is a new mnist like dataset (this sequence of task is an original contribution of this repository)
+
+### Datasets
 
 -   Mnist
 -   fashion-Mnist
@@ -20,10 +24,10 @@ Several dataset can be used :
 -   mnishion : concatenation of Mnist and Fashion-Mnist
 -   core50 (in developpment)
 
-Some supplementary option are possible:
--   Class order can be shuffled for disjoint tasks
+### Some supplementary option are possible:
+-   The number of tasks can be choosed (1, 3, 5 and 10 have been tested normally)
+-   Classes order can be shuffled for disjoint tasks
 -   We can choose the magnitude of rotation for rotations mnist
--   Of course we can choose the number of tasks (1, 3, 5 and 10 have been tested normally)
 
 
 ### Few possible commands
@@ -57,18 +61,28 @@ python main.py --dataset MNIST --task dijsoint_classes_permutations --n_tasks 10
 
 ### Example of use
 
+First we create the sequence of tasks and save it
+```bash
+#MNIST with 10 tasks of one class
+python main.py --dataset MNIST --task disjoint --n_tasks 10 --dir ./Archives
+```
+
+Then we can use the saved sequence in another program for continual learning
 ```python
 #MNIST with 10 tasks of one class
-from data_loader import Dataset_Loader
+from data_loader import DatasetLoader
 import os
 import torch
 from torch.utils import data
 
+# Path to the task sequence
 path = "./Archives/Data/Tasks/MNIST/disjoint_10_train.pt"
+# load the file
 Data = torch.load(path)
-data_set = Dataset_Loader(Data, current_task=0, transform=None, load_images=False, path=None)
+# create a dataset loader
+data_set = DatasetLoader(Data, current_task=0, transform=None, load_images=False, path=None)
 
-# Visualize samples for each tasks
+# We can visualize samples from the sequence of tasks
 for i in range(10):
     data_set.set_task(i)
     
@@ -82,7 +96,7 @@ for i in range(10):
     
 # use the dataset with pytorch dataloader for training an algo
 
-# create dataloader
+# create pytorch dataloader
 train_loader = data.DataLoader(data_set, batch_size=64, shuffle=True, num_workers=6)
 
 #set the task on 0 for example with the data_set

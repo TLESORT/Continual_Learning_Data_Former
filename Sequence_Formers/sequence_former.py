@@ -61,7 +61,7 @@ class Sequence_Former(object):
         :param data: data to process
         :return: data post processing
         """
-        if not ind_task < self.num_classes:
+        if not ind_task < self.n_tasks:
             raise AssertionError("Error in task indice")
         return deepcopy(data)
 
@@ -72,7 +72,7 @@ class Sequence_Former(object):
         :param label: label to process
         :return: data post processing
         """
-        if not ind_task < self.num_classes:
+        if not ind_task < self.n_tasks:
             raise AssertionError("Error in task indice")
         return label
 

@@ -56,16 +56,16 @@ def load_both(path, imageSize):
     return x_tr, y_tr
 
 
-def load_core50(path, imageSize=32, path_only=False):
-    path = os.path.join(path, "core50", "processed")
+def load_core50(dataset, path, imageSize=32, path_only=False):
+    path = os.path.join(path, dataset, "processed")
 
 
     if path_only:
-        path_train = os.path.join(path, 'core50_paths_train.npz')
-        path_test = os.path.join(path, 'core50_paths_test.npz')
+        path_train = os.path.join(path, '{}_paths_train.npz'.format(dataset))
+        path_test = os.path.join(path, '{}_paths_test.npz'.format(dataset))
     else:
-        path_train = os.path.join(path, 'core50_imgs_' + str(imageSize) + '_train.npz')
-        path_test = os.path.join(path, 'core50_imgs_' + str(imageSize) + '_test.npz')
+        path_train = os.path.join(path, '{}_imgs_'.format(dataset) + str(imageSize) + '_train.npz')
+        path_test = os.path.join(path, '{}_imgs_'.format(dataset) + str(imageSize) + '_test.npz')
 
     x_tr, y_tr = load_data(path_train, imageSize, path_only)
     x_te, y_te = load_data(path_test, imageSize, path_only)

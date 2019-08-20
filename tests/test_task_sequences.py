@@ -93,7 +93,7 @@ def test_disjoint_samples_disjoint_classes_permutations(ind_task, dataset):
 
     data_set.visualize_sample(path_out, number=100, shape=[28, 28, 1])
 
-
+# command : python main.py --task disjoint_rotations --n_tasks 30 --dataset MNIST
 @pytest.mark.parametrize("dataset", ["MNIST"])
 @pytest.mark.parametrize("ind_task",
                          [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,

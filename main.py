@@ -24,7 +24,7 @@ parser.add_argument('--task', default='disjoint',
                              'disjoint', "mnist_fellowship", 'disjoint_classes_permutations'],
                     help='type of task to create', )
 parser.add_argument('--dataset', default='MNIST', type=str,
-                    choices=['MNIST', 'fashion', 'core50', 'cifar10', 'mnishion', "kmnist", "mnist_fellowship"])
+                    choices=['MNIST', 'fashion', 'core10', 'core50', 'cifar10', 'mnishion', "kmnist", "mnist_fellowship"])
 parser.add_argument('--n_tasks', default=3, type=int, help='number of tasks')
 parser.add_argument('--num_classes', default=10, type=int, help='number of classes')
 parser.add_argument('--classes_per_task', default=3, type=int, help='classes per tasks')

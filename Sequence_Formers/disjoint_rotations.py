@@ -10,7 +10,8 @@ class DisjointRotations(Rotations):
         self.number_rotation = 3
 
         if not self.num_classes * self.number_rotation == self.n_tasks:
-            raise AssertionError("Wrong number of tasks for this experiment")
+            raise AssertionError("Wrong number of tasks for this experiment {} vs {}"
+                                 .format(self.num_classes * self.number_rotation, self.n_tasks))
 
     def transformation(self, ind_task, data):
         """

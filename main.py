@@ -4,7 +4,7 @@ import os
 from Sequence_Formers.disjoint import Disjoint
 from Sequence_Formers.disjoint_rotations import DisjointRotations
 from Sequence_Formers.disjoint_mnishion import DisjointMnishion
-from Sequence_Formers.Mnist_Fellowship import MnistFellowship
+from Sequence_Formers.mnist_fellowship import MnistFellowship
 from Sequence_Formers.rotations import Rotations
 from Sequence_Formers.permutations import Permutations
 from Sequence_Formers.disjoint_classes_permutations import DisjointClassesPermutations

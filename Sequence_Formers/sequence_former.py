@@ -106,6 +106,15 @@ class Sequence_Former(object):
         y_va_t = self.label_transformation(ind_task, y_tr[i_va])
         y_te_t = self.label_transformation(ind_task, y_te[i_te])
 
+        if self.path_only:
+            print("Task : {}".format(ind_task))
+            ind = torch.randperm(len(x_tr_t))[:10]
+            print(x_tr_t[ind])
+            ind = torch.randperm(len(x_va_t))[:10]
+            print(x_va_t[ind])
+            ind = torch.randperm(len(x_te_t))[:10]
+            print(x_te_t[ind])
+
         return class_min, class_max, x_tr_t, y_tr_t, x_va_t, y_va_t, x_te_t, y_te_t
 
     def formating_data(self):
@@ -141,12 +150,15 @@ class Sequence_Former(object):
                 full_y_va = y_va_t
                 full_y_te = y_te_t
             else:
-                full_x_tr = torch.cat([full_x_tr, x_tr_t], dim=0)
-                full_x_va = torch.cat([full_x_va, x_va_t], dim=0)
-                full_x_te = torch.cat([full_x_te, x_te_t], dim=0)
-                full_y_tr = torch.cat([full_y_tr, y_tr_t], dim=0)
-                full_y_va = torch.cat([full_y_va, y_va_t], dim=0)
-                full_y_te = torch.cat([full_y_te, y_te_t], dim=0)
+                print("nothing to do here")
+                #print(full_x_tr)
+                #print(x_tr_t)
+                #full_x_tr = torch.cat([full_x_tr, x_tr_t], dim=0)
+                #full_x_va = torch.cat([full_x_va, x_va_t], dim=0)
+                #full_x_te = torch.cat([full_x_te, x_te_t], dim=0)
+                #full_y_tr = torch.cat([full_y_tr, y_tr_t], dim=0)
+                #full_y_va = torch.cat([full_y_va, y_va_t], dim=0)
+                #full_y_te = torch.cat([full_y_te, y_te_t], dim=0)
 
         if not self.path_only:
             print(tasks_tr[0][1].shape)

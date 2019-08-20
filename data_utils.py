@@ -61,6 +61,7 @@ def check_and_Download_data(folder, dataset, task):
 
 def load_data(dataset, path2data, imageSize=32, path_only=False):
     if dataset == 'cifar10':
+        path2data = os.path.join(path2data, dataset, "processed")
         x_tr, y_tr, x_te, y_te = load_Cifar10(path2data)
         print(x_tr.shape)
 
@@ -77,7 +78,7 @@ def load_data(dataset, path2data, imageSize=32, path_only=False):
         x_tr, y_tr, x_te, y_te = load_core50(path2data, imageSize=imageSize, path_only=path_only)
 
     elif dataset == 'mnist_fellowship':
-        # In this case data will be loader later dataset by dataset
+        # In this case data will be loaded later dataset by dataset
         return None, None, None, None
     else:
 
@@ -125,6 +126,10 @@ def save_images(images, size, image_path):
 
 def imsave(images, size, path):
     image = np.squeeze(merge(images, size))
+    image -= np.min(image)
+    image /= np.max(image) + 1e-12
+    image = 255 * image  # Now scale by 255
+    image = image.astype(np.uint8)
     return imageio.imwrite(path, image)
 
 

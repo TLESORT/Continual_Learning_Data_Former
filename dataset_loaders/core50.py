@@ -11,6 +11,10 @@ def load_data(path, imageSize, path_only=False):
 
 
 def load_path(path):
+
+    print("I am loading")
+    print(path)
+
     path_tr = np.load(path)['paths']
     y_tr = np.load(path)['y']
     y_tr = y_tr.reshape((-1))
@@ -54,6 +58,7 @@ def load_both(path, imageSize):
 
 def load_core50(path, imageSize=32, path_only=False):
     path = os.path.join(path, "core50", "processed")
+
 
     if path_only:
         path_train = os.path.join(path, 'core50_paths_train.npz')

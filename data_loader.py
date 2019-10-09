@@ -103,16 +103,37 @@ class DatasetLoader(data.Dataset):
 
         indices = torch.randperm(len(self.labels))[0:number]
         batch = None
-        labels = torch.LongTensor(number)
 
         for i in range(number):
+            # we need to use get item to have the transform used
             img, y = self.__getitem__(indices[i].item())
 
             if i == 0:
                 batch = torch.FloatTensor(number, shape[0], shape[1], shape[2])
 
             batch[i] = img.reshape(shape).clone()
-            labels[i] = y
+
+        labels = self.dataset[self.current_task][2][indices]
+        return batch, labels
+
+    def get_batch_from_label(self, label):
+        """
+        This function return a number of sample from the dataset with specific label
+        :param label: label to get data from
+        :return: FloatTensor on cpu of all samples
+        """
+        indices = [i for i, y in enumerate(self.dataset[self.current_task][2]) if y == label]
+
+        batch = None
+
+        for i in range(len(indices)):
+            # we need to use get item to have the transform used
+            img, y = self.__getitem__(indices[i])
+
+            if i == 0:
+                batch = torch.FloatTensor(len(indices), img.shape[0])
+
+            batch[i] = img.clone()
 
         labels = self.dataset[self.current_task][2][indices]
         return batch, labels
@@ -145,7 +166,7 @@ class DatasetLoader(data.Dataset):
         else:
             print("WE DO NOT SAVE ANYMORE")
 
-    def visualize_sample(self, path, number, shape):
+    def visualize_sample(self, path, number, shape, class_=None):
 
         data, target = self.get_sample(number, shape)
 

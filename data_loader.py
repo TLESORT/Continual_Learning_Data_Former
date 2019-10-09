@@ -70,13 +70,8 @@ class DatasetLoader(data.Dataset):
     def next(self):
         return self.__next__()
 
-    def set_task(self, new_task_index):
-        """
 
-        :param new_task_index:
-        :return:
-        """
-        self.current_task = new_task_index
+    def reset_lists(self):
 
         list_data = range(self.dataset[self.current_task][1].shape[0])
         list_labels = self.dataset[self.current_task][2].tolist()
@@ -85,12 +80,21 @@ class DatasetLoader(data.Dataset):
         self.list_IDs = {i: list_data[i] for i in range(0, len(list_data))}
         self.labels = {i: list_labels[i] for i in range(0, len(list_labels))}
 
+    def set_task(self, new_task_index):
+        """
+
+        :param new_task_index:
+        :return:
+        """
+        self.current_task = new_task_index
+        self.reset_lists()
+
         return self
 
     def shuffle_task(self):
         indices = torch.randperm(len(self.dataset[self.current_task][1]))
-        self.dataset[self.current_task][1] = self.dataset[self.current_task][1][indices].clone()
-        self.dataset[self.current_task][2] = self.dataset[self.current_task][2][indices].clone()
+        self.dataset[self.current_task][1] = self.dataset[self.current_task][1][indices]
+        self.dataset[self.current_task][2] = self.dataset[self.current_task][2][indices]
 
         return self
 
@@ -146,16 +150,16 @@ class DatasetLoader(data.Dataset):
         :return: the actual dataset with supplementary data inside
         '''
         self.dataset[self.current_task][1] = torch.cat((self.dataset[self.current_task][1], new_data.dataset[task][1]),
-                                                       0).clone()
+                                                       0)
         self.dataset[self.current_task][2] = torch.cat((self.dataset[self.current_task][2], new_data.dataset[task][2]),
-                                                       0).clone()
-
+                                                       0)
+        self.reset_lists()
         return self
 
     def free(self, ind_task):
 
-        self.dataset[ind_task][1] = None
-        self.dataset[ind_task][2] = None
+        self.dataset[ind_task][1] = torch.FloatTensor(0)
+        self.dataset[ind_task][2] = torch.LongTensor(0)
 
     def get_current_task(self):
         return self.current_task
@@ -240,12 +244,14 @@ class DatasetLoader(data.Dataset):
         # then labels
         self.dataset[self.current_task][2] = torch.cat([self.dataset[self.current_task][2]] * increase_factor, 0)
 
+        self.reset_lists()
         return self
 
     def sub_sample(self, number):
         indices = torch.randperm(len(self))[0:number]
         self.dataset[self.current_task][1] = self.dataset[self.current_task][1][indices]
         self.dataset[self.current_task][2] = self.dataset[self.current_task][2][indices]
+        self.reset_lists()
         return self
 
     def delete_class(self, class_ind):
@@ -256,8 +262,10 @@ class DatasetLoader(data.Dataset):
         # keep only those indices
         self.dataset[self.current_task][1] = self.dataset[self.current_task][1][indices]
         self.dataset[self.current_task][2] = self.dataset[self.current_task][2][indices]
+        self.reset_lists()
 
     def delete_task(self, ind_task):
         # keep only those indices
-        self.dataset[ind_task][1] = []
-        self.dataset[ind_task][2] = []
+        self.dataset[ind_task][1] = torch.FloatTensor(0)
+        self.dataset[ind_task][2] = torch.LongTensor(0)
+        self.reset_lists()

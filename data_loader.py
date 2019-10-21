@@ -30,20 +30,29 @@ class DatasetLoader(data.Dataset):
         self.transform = transform
         self.load_images = load_images
         self.path = path
+        self.shape = None
 
         'Initialization'
-        if self.load_images:
-            list_data = range(len(self.dataset[self.current_task][1]))
-        else:
-            list_data = range(self.dataset[self.current_task][1].shape[0])
-        list_labels = self.dataset[self.current_task][2].tolist()
+        self.all_task_IDs = []
+        self.all_labels = []
+        for ind_task in range(self.n_tasks):
 
-        # convert it to dictionnary for pytorch
-        self.list_IDs = {i: list_data[i] for i in range(0, len(list_data))}
-        self.labels = {i: list_labels[i] for i in range(0, len(list_labels))}
+            if self.load_images:
+                list_data = range(len(self.dataset[ind_task][1]))
+            else:
+                list_data = range(self.dataset[ind_task][1].shape[0])
+            list_labels = self.dataset[ind_task][2].tolist()
+
+            # convert it to dictionnary for pytorch
+            self.all_task_IDs.append({i: list_data[i] for i in range(0, len(list_data))})
+            self.all_labels.append({i: list_labels[i] for i in range(0, len(list_labels))})
+
+        # lists used by pytorch loader
+        self.list_IDs = self.all_task_IDs[self.current_task]
+        self.labels = self.all_labels[self.current_task]
 
     def __len__(self):
-        return len(self.dataset[self.current_task][1])
+        return len(self.list_IDs)
 
     def __getitem__(self, index):
         'Generates one sample of data'
@@ -70,7 +79,6 @@ class DatasetLoader(data.Dataset):
     def next(self):
         return self.__next__()
 
-
     def reset_lists(self):
 
         list_data = range(self.dataset[self.current_task][1].shape[0])
@@ -87,7 +95,8 @@ class DatasetLoader(data.Dataset):
         :return:
         """
         self.current_task = new_task_index
-        self.reset_lists()
+        self.list_IDs = self.all_task_IDs[self.current_task]
+        self.labels = self.all_labels[self.current_task]
 
         return self
 
@@ -120,6 +129,22 @@ class DatasetLoader(data.Dataset):
         labels = self.dataset[self.current_task][2][indices]
         return batch, labels
 
+    def get_set(self, number, shape):
+        """
+        This function return a number of sample from the dataset
+        :param number: number of data point expected
+        :return: FloatTensor on cpu of all samples
+        """
+
+        if self.load_images:
+            # the set is composed of path and not images
+            indices = torch.randperm(len(self.labels))[0:number]
+            batch = self.dataset[self.current_task][1][indices]
+            labels = self.dataset[self.current_task][2][indices]
+        else:
+            batch, labels = self.get_sample(number, shape)
+        return batch, labels
+
     def get_batch_from_label(self, label):
         """
         This function return a number of sample from the dataset with specific label
@@ -135,7 +160,7 @@ class DatasetLoader(data.Dataset):
             img, y = self.__getitem__(indices[i])
 
             if i == 0:
-                batch = torch.FloatTensor(len(indices), img.shape[0])
+                batch = torch.zeros([len(indices)] + list(img.shape))
 
             batch[i] = img.clone()
 
@@ -149,11 +174,37 @@ class DatasetLoader(data.Dataset):
         :param new_data: data to add to the actual task
         :return: the actual dataset with supplementary data inside
         '''
-        self.dataset[self.current_task][1] = torch.cat((self.dataset[self.current_task][1], new_data.dataset[task][1]),
-                                                       0)
+
+        # First update list
+
+        actual_data_len = len(self.list_IDs)
+        new_size = len(new_data)
+
+        list_data = range(actual_data_len, new_size + actual_data_len)
+        list_labels = new_data.labels
+
+        for i in range(new_size):
+            # convert it to dictionnary for pytorch
+            self.all_task_IDs[self.current_task][i + actual_data_len] = list_data[i]
+            self.all_labels[self.current_task][i + actual_data_len] = list_labels[i]
+
+        # lists used by pytorch loader
+        self.list_IDs = self.all_task_IDs[self.current_task]
+        self.labels = self.all_labels[self.current_task]
+
+        # then update data
+
+        if self.load_images:
+            # we concat to list of images
+            self.dataset[self.current_task][1] = np.concatenate(
+                (self.dataset[self.current_task][1], new_data.dataset[task][1]))
+        else:
+            shape =[-1] + list(self.dataset[self.current_task][1][0].shape)
+            self.dataset[self.current_task][1] = torch.cat(
+                (self.dataset[self.current_task][1], new_data.dataset[task][1].view(shape)),
+                0)
         self.dataset[self.current_task][2] = torch.cat((self.dataset[self.current_task][2], new_data.dataset[task][2]),
                                                        0)
-        self.reset_lists()
         return self
 
     def free(self, ind_task):
@@ -177,16 +228,6 @@ class DatasetLoader(data.Dataset):
         # get sample in order from 0 to 9
         target, order = target.sort()
         data = data[order]
-        #
-        # if self.transform is not None:
-        #     tf_bacth = None
-        #     for i in range(number):
-        #          tf_data = TF.to_pil_image(data[i])
-        #          tf_data = self.transform(tf_data)
-        #          if i == 0:
-        #             tf_bacth = torch.FloatTensor(number, tf_data.shape[0], tf_data.shape[1], tf_data.shape[2])
-        #          tf_bacth[i] = tf_data
-        #     data = tf_bacth
 
         image_frame_dim = int(np.floor(np.sqrt(number)))
 
@@ -239,19 +280,27 @@ class DatasetLoader(data.Dataset):
             make_samples_batche(concat[:self.batch_size], self.batch_size, path)
 
     def increase_size(self, increase_factor):
-        # first data
-        self.dataset[self.current_task][1] = torch.cat([self.dataset[self.current_task][1]] * increase_factor, 0)
-        # then labels
-        self.dataset[self.current_task][2] = torch.cat([self.dataset[self.current_task][2]] * increase_factor, 0)
+        len_data = len(self.list_IDs)
 
-        self.reset_lists()
+        # make the list grow (not the data)
+        self.all_task_IDs[self.current_task] = {i: self.list_IDs[i % len_data] for i in range(len_data)}
+        self.all_task_IDs[self.current_task] = {i: self.labels[i % len_data] for i in range(len_data)}
+
+        self.list_IDs = self.all_task_IDs[self.current_task]
+        self.labels = self.all_labels[self.current_task]
+
         return self
 
     def sub_sample(self, number):
         indices = torch.randperm(len(self))[0:number]
-        self.dataset[self.current_task][1] = self.dataset[self.current_task][1][indices]
-        self.dataset[self.current_task][2] = self.dataset[self.current_task][2][indices]
-        self.reset_lists()
+
+        # subsamples the list (not the data)
+        self.all_task_IDs[self.current_task] = {i: self.list_IDs[indices[i]] for i in range(number)}
+        self.all_task_IDs[self.current_task] = {i: self.labels[indices[i]] for i in range(number)}
+
+        self.list_IDs = self.all_task_IDs[self.current_task]
+        self.labels = self.all_labels[self.current_task]
+
         return self
 
     def delete_class(self, class_ind):
@@ -262,10 +311,14 @@ class DatasetLoader(data.Dataset):
         # keep only those indices
         self.dataset[self.current_task][1] = self.dataset[self.current_task][1][indices]
         self.dataset[self.current_task][2] = self.dataset[self.current_task][2][indices]
-        self.reset_lists()
+
+        self.all_task_IDs[self.current_task] = {}
+        self.all_labels[self.current_task] = {}
 
     def delete_task(self, ind_task):
         # keep only those indices
         self.dataset[ind_task][1] = torch.FloatTensor(0)
         self.dataset[ind_task][2] = torch.LongTensor(0)
-        self.reset_lists()
+
+        self.all_task_IDs[self.current_task] = {}
+        self.all_labels[self.current_task] = {}

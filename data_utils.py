@@ -63,16 +63,15 @@ def load_data(dataset, path2data, imageSize=32, path_only=False):
     if dataset == 'cifar10':
         path2data = os.path.join(path2data, dataset, "processed")
         x_tr, y_tr, x_te, y_te = load_Cifar10(path2data)
-        print(x_tr.shape)
 
-        x_tr = x_tr.float().view(x_tr.size(0), -1)
-        x_te = x_te.float().view(x_te.size(0), -1)
+        x_tr = x_tr.float()
+        x_te = x_te.float()
 
     elif dataset == 'LSUN':
         x_tr, y_tr, x_te, y_te = load_LSUN(path2data)
 
-        x_tr = x_tr.float().view(x_tr.size(0), -1)
-        x_te = x_te.float().view(x_te.size(0), -1)
+        x_tr = x_tr.float()
+        x_te = x_te.float()
     elif dataset == 'core50' or dataset == 'core10':
 
         x_tr, y_tr, x_te, y_te = load_core50(dataset, path2data, imageSize=imageSize, path_only=path_only)
@@ -94,8 +93,8 @@ def load_data(dataset, path2data, imageSize=32, path_only=False):
         x_tr, y_tr = torch.load(train_file)
         x_te, y_te = torch.load(test_file)
 
-        x_tr = x_tr.view(x_tr.size(0), -1).float() / 255.0
-        x_te = x_te.view(x_te.size(0), -1).float() / 255.0
+        x_tr = x_tr.float() / 255.0
+        x_te = x_te.float() / 255.0
 
     y_tr = y_tr.view(-1).long()
     y_te = y_te.view(-1).long()

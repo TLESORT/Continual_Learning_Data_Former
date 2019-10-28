@@ -30,7 +30,7 @@ class DatasetLoader(data.Dataset):
         self.transform = transform
         self.load_images = load_images
         self.path = path
-        self.shape = None
+        self.shape_img = None
 
         'Initialization'
         self.all_task_IDs = []
@@ -47,9 +47,15 @@ class DatasetLoader(data.Dataset):
             self.all_task_IDs.append({i: list_data[i] for i in range(0, len(list_data))})
             self.all_labels.append({i: list_labels[i] for i in range(0, len(list_labels))})
 
+            assert self.dataset[self.current_task][1].size(0) == self.dataset[self.current_task][2].size(0), \
+                print("Init Sanity Check, task {} ".format(ind_task))
+
         # lists used by pytorch loader
         self.list_IDs = self.all_task_IDs[self.current_task]
         self.labels = self.all_labels[self.current_task]
+
+        if not load_images:
+            self.shape_img = list(self.dataset[ind_task][1][0].shape)
 
     def __len__(self):
         return len(self.list_IDs)
@@ -94,11 +100,11 @@ class DatasetLoader(data.Dataset):
         self.current_task = new_task_index
         self.list_IDs = self.all_task_IDs[self.current_task]
         self.labels = self.all_labels[self.current_task]
-
         return self
 
     def shuffle_task(self):
         indices = torch.randperm(len(self.dataset[self.current_task][1]))
+
         self.dataset[self.current_task][1] = self.dataset[self.current_task][1][indices]
         self.dataset[self.current_task][2] = self.dataset[self.current_task][2][indices]
 
@@ -108,7 +114,6 @@ class DatasetLoader(data.Dataset):
     def get_samples_from_ind(self, indices):
         batch = None
         labels = None
-        size_image = None
 
         for i in range(len(indices)):
             # we need to use get item to have the transform used
@@ -163,33 +168,36 @@ class DatasetLoader(data.Dataset):
         return self.get_samples_from_ind(indices)
 
     def concatenate(self, new_data, task=0):
-
         '''
 
         :param new_data: data to add to the actual task
         :return: the actual dataset with supplementary data inside
         '''
+        new_data.sanity_check("before concatenate")
 
         self.list_IDs = self.all_task_IDs[self.current_task]
         self.labels = self.all_labels[self.current_task]
 
         # First update list
 
-        actual_data_len = len(self.list_IDs)
-        new_size = len(new_data)
+        list_len = len(self.list_IDs)
+
+        new_size = len(new_data.list_IDs)
+
+        if len(self.list_IDs) > 0:
+            self.sanity_check("before concatenate")
 
         # the actual size of the dataset is not the same as the size self.list_IDs
         # some index might have been modified to artificially grow/reduce data size
-        size_dataset = len(new_data.labels)
+        size_new_dataset = len(new_data.labels)
         actual_size_dataset = len(self.labels)
 
-
         for i in range(new_size):
-            self.all_task_IDs[self.current_task][i + actual_data_len] = new_data.list_IDs[i] + size_dataset
+            self.all_task_IDs[self.current_task][i + list_len] = new_data.list_IDs[i] + actual_size_dataset
+        self.list_IDs = self.all_task_IDs[self.current_task]
 
-        for i in range(len(new_data.labels)):
-            ID = new_data.list_IDs[i]
-            self.all_labels[self.current_task][i + actual_size_dataset] = new_data.labels[ID]
+        for i in range(size_new_dataset):
+            self.all_labels[self.current_task][i + actual_size_dataset] = new_data.labels[i]
 
         # lists used by pytorch loader
         self.list_IDs = self.all_task_IDs[self.current_task]
@@ -202,22 +210,17 @@ class DatasetLoader(data.Dataset):
             self.dataset[self.current_task][1] = np.concatenate(
                 (self.dataset[self.current_task][1], new_data.dataset[task][1]))
         else:
-            shape = [-1] + list(self.dataset[self.current_task][1][0].shape)
+            shape = [-1] + self.shape_img
+
             self.dataset[self.current_task][1] = torch.cat(
                 (self.dataset[self.current_task][1], new_data.dataset[task][1].view(shape)),
                 0)
         self.dataset[self.current_task][2] = torch.cat((self.dataset[self.current_task][2], new_data.dataset[task][2]),
                                                        0)
 
-        assert len(self.labels) == self.dataset[self.current_task][2].size(0), \
-            print(len(self.labels), " vs ", self.dataset[self.current_task][2].size(0))
+        self.sanity_check("after concatenate")
 
         return self
-
-    def free(self, ind_task):
-
-        self.dataset[ind_task][1] = torch.FloatTensor(0)
-        self.dataset[ind_task][2] = torch.LongTensor(0)
 
     def get_current_task(self):
         return self.current_task
@@ -294,6 +297,8 @@ class DatasetLoader(data.Dataset):
         self.all_task_IDs[self.current_task] = {i: self.list_IDs[i % len_data] for i in range(new_len)}
         self.list_IDs = self.all_task_IDs[self.current_task]
 
+        self.sanity_check("increase_size")
+
         return self
 
     def sub_sample(self, number):
@@ -307,20 +312,40 @@ class DatasetLoader(data.Dataset):
 
     def delete_class(self, class_ind):
         # select all the classes differnet to ind_class
-        indices = torch.nonzero(self.dataset[self.current_task][2] != class_ind)
-        indices = indices.reshape(-1)
-
-        # keep only those indices
-        self.dataset[self.current_task][1] = self.dataset[self.current_task][1][indices]
-        self.dataset[self.current_task][2] = self.dataset[self.current_task][2][indices]
-
-        self.all_task_IDs[self.current_task] = {}
-        self.all_labels[self.current_task] = {}
+        # we delete only index and not data
+        index2keep = {i: self.list_IDs[i] for i in range(len(self.list_IDs)) if
+                      self.labels[self.list_IDs[i]] != class_ind}
+        self.all_task_IDs[self.current_task] = {i: self.index2keep[key] for i, key in enumerate(index2keep.keys())}
+        self.list_IDs = self.all_task_IDs[self.current_task]
 
     def delete_task(self, ind_task):
-        # keep only those indices
+
+        self.current_task = ind_task
+
         self.dataset[ind_task][1] = torch.FloatTensor(0)
         self.dataset[ind_task][2] = torch.LongTensor(0)
 
-        self.all_task_IDs[self.current_task] = {}
-        self.all_labels[self.current_task] = {}
+        self.all_task_IDs[ind_task] = {}
+        self.all_labels[ind_task] = {}
+        # lists used by pytorch loader
+        self.list_IDs = self.all_task_IDs[ind_task]
+        self.labels = self.all_labels[ind_task]
+
+    def sanity_check(self, origin):
+
+        assert self.dataset[self.current_task][1].size(0) == self.dataset[self.current_task][2].size(0), \
+            print("Sanity check size data ({}) vs label ({}) : {}".format(self.dataset[self.current_task][1].size(0),
+                                                                          self.dataset[self.current_task][2].size(0),
+                                                                          origin))
+
+        assert self.list_IDs[max(self.list_IDs, key=self.list_IDs.get)] + 1 == self.dataset[self.current_task][2].size(
+            0), \
+            print("Sanity check list_IDs ({}) vs label ({}) : {}".format(
+                self.list_IDs[max(self.list_IDs, key=self.list_IDs.get) + 1],
+                self.dataset[self.current_task][2].size(0),
+                origin))
+
+        assert len(self.labels) == self.dataset[self.current_task][2].size(0), \
+            print("Sanity check list label ({}) vs label ({}) : {}".format(len(self.labels),
+                                                                           self.dataset[self.current_task][2].size(0),
+                                                                           origin))

@@ -47,9 +47,6 @@ class DatasetLoader(data.Dataset):
             self.all_task_IDs.append({i: list_data[i] for i in range(0, len(list_data))})
             self.all_labels.append({i: list_labels[i] for i in range(0, len(list_labels))})
 
-            assert self.dataset[self.current_task][1].size(0) == self.dataset[self.current_task][2].size(0), \
-                print("Init Sanity Check, task {} ".format(ind_task))
-
         # lists used by pytorch loader
         self.list_IDs = self.all_task_IDs[self.current_task]
         self.labels = self.all_labels[self.current_task]

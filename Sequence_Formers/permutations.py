@@ -23,4 +23,6 @@ class Permutations(Sequence_Former):
 
     def transformation(self, ind_task, data):
         p = self.list_perm[ind_task]
-        return deepcopy(data).index_select(1, p)
+
+        data = data.view(-1, self.num_pixels)
+        return deepcopy(data).index_select(1, p).view(-1, self.img_channels, self.imageSize, self.imageSize)

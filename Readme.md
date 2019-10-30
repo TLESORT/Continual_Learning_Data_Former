@@ -181,3 +181,9 @@ TOTAL                                                1060    485    54%
 ======= 105 passed, 4 skipped, 2 warnings in 100.94 seconds =======
 
 ```
+
+### Build Doxygen doc
+
+```
+doxygen doxygen_config
+```

@@ -9,6 +9,7 @@ class DisjointClassesPermutations(Disjoint):
 
         # There are several possible permutation inside the permutation file, so we need to choose one
         self.index_permutation = args.index_permutation
+        assert self.index_permutation is not None
         self.permutation = torch.load("permutation_classes.t")[self.index_permutation]
 
         name = ''

@@ -127,3 +127,20 @@ for t, (data, target) in enumerate(train_loader):
 }
 
 ```
+
+### Run Tests
+
+```
+# First you need to generate the base datasets with the following commands
+python main.py --dataset MNIST --n_tasks 10 --task disjoint
+python main.py --dataset fashion --n_tasks 10 --task disjoint
+python main.py --dataset kmnist --n_tasks 10 --task disjoint
+python main.py --dataset MNIST --n_tasks 5 --task rotations
+python main.py --dataset MNIST --n_tasks 5 --task permutations
+python main.py --dataset MNIST --n_tasks 30 --task disjoint_rotations
+python main.py --dataset MNIST  --n_tasks 10 --task disjoint_classes_permutations --index_permutations 2
+python main.py --n_tasks 3 --task mnist_fellowship
+
+python -m pytest tests/
+python -m pytest --cov=. tests/
+```

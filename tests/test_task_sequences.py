@@ -6,7 +6,7 @@ import os
 
 # command MNIST : python main.py --task disjoint --n_tasks 10 --dataset MNIST
 # command fashion : python main.py --task disjoint --n_tasks 10 --dataset fashion
-@pytest.mark.parametrize("dataset", ["MNIST", "fashion"])
+@pytest.mark.parametrize("dataset", ["MNIST", "fashion", "kmnist"])
 @pytest.mark.parametrize("ind_task", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 def test_disjoint_samples_train_10_tasks(dataset, ind_task):
     path = "./Archives/Data/Tasks/{}/disjoint_10_train.pt".format(dataset)
@@ -44,7 +44,7 @@ def test_disjoint_samples_train_5_tasks(task, dataset, ind_task):
     path_out = os.path.join(folder, "{}_{}_task_{}.png".format(dataset, task, ind_task))
 
     if task == "permutations":
-        permutations = torch.load("../Archives/Data/Tasks/{}/ind_permutations_5_train.pt".format(dataset))
+        permutations = torch.load("./Archives/Data/Tasks/{}/ind_permutations_5_train.pt".format(dataset))
         data_set.visualize_reordered(path_out, number=100, shape=[28, 28, 1], permutations=permutations)
     else:
         data_set.visualize_sample(path_out, number=100, shape=[28, 28, 1])
@@ -89,11 +89,12 @@ def test_disjoint_samples_disjoint_classes_permutations(ind_task, dataset):
     if not os.path.exists(folder):
         os.makedirs(folder)
 
-    path_out = os.path.join(folder, "dijsoint_classes_permutations_{}.png".format(ind_task))
+    path_out = os.path.join(folder, "disjoint_classes_permutations_{}.png".format(ind_task))
 
     data_set.visualize_sample(path_out, number=100, shape=[28, 28, 1])
 
 # command : python main.py --task disjoint_rotations --n_tasks 30 --dataset MNIST
+@pytest.mark.hello
 @pytest.mark.parametrize("dataset", ["MNIST"])
 @pytest.mark.parametrize("ind_task",
                          [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,

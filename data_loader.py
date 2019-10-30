@@ -112,9 +112,9 @@ class DatasetLoader(data.Dataset):
         batch = None
         labels = None
 
-        for i in range(len(indices)):
+        for i, ind in enumerate(indices):
             # we need to use get item to have the transform used
-            img, y = self.__getitem__(indices[i])
+            img, y = self.__getitem__(ind)
 
             if i == 0:
                 if len(list(img.shape)) == 2:
@@ -310,7 +310,7 @@ class DatasetLoader(data.Dataset):
     def delete_class(self, class_ind):
         # select all the classes differnet to ind_class
         # we delete only index and not data
-        index2keep = {i: self.list_IDs[i] for i in range(len(self.list_IDs)) if
+        index2keep = {i: self.list_IDs[i] for i, _ in enumerate(self.list_IDs) if
                       self.labels[self.list_IDs[i]] != class_ind}
         self.all_task_IDs[self.current_task] = {i: self.index2keep[key] for i, key in enumerate(index2keep.keys())}
         self.list_IDs = self.all_task_IDs[self.current_task]
@@ -330,19 +330,18 @@ class DatasetLoader(data.Dataset):
 
     def sanity_check(self, origin):
 
-        assert self.dataset[self.current_task][1].size(0) == self.dataset[self.current_task][2].size(0), \
-            print("Sanity check size data ({}) vs label ({}) : {}".format(self.dataset[self.current_task][1].size(0),
+        if not self.dataset[self.current_task][1].size(0) == self.dataset[self.current_task][2].size(0):
+            raise AssertionError("Sanity check size data ({}) vs label ({}) : {}".format(self.dataset[self.current_task][1].size(0),
                                                                           self.dataset[self.current_task][2].size(0),
                                                                           origin))
 
-        assert self.list_IDs[max(self.list_IDs, key=self.list_IDs.get)] + 1 == self.dataset[self.current_task][2].size(
-            0), \
-            print("Sanity check list_IDs ({}) vs label ({}) : {}".format(
+        if not self.list_IDs[max(self.list_IDs, key=self.list_IDs.get)] + 1 == self.dataset[self.current_task][2].size(0):
+            raise AssertionError("Sanity check list_IDs ({}) vs label ({}) : {}".format(
                 self.list_IDs[max(self.list_IDs, key=self.list_IDs.get) + 1],
                 self.dataset[self.current_task][2].size(0),
                 origin))
 
-        assert len(self.labels) == self.dataset[self.current_task][2].size(0), \
-            print("Sanity check list label ({}) vs label ({}) : {}".format(len(self.labels),
+        if not len(self.labels) == self.dataset[self.current_task][2].size(0):
+            raise AssertionError("Sanity check list label ({}) vs label ({}) : {}".format(len(self.labels),
                                                                            self.dataset[self.current_task][2].size(0),
                                                                            origin))

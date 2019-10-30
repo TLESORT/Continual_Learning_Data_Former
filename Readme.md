@@ -130,7 +130,7 @@ for t, (data, target) in enumerate(train_loader):
 
 ### Run Tests
 
-```
+```python
 # First you need to generate the base datasets with the following commands
 python main.py --dataset MNIST --n_tasks 10 --task disjoint
 python main.py --dataset fashion --n_tasks 10 --task disjoint
@@ -144,7 +144,6 @@ python main.py --n_tasks 3 --task mnist_fellowship
 python -m pytest tests/
 python -m pytest --cov=. tests/
 ```
-
 
 ### Last Coverage
 
@@ -179,11 +178,10 @@ tests/test_task_sequences.py                           68      5    93%
 TOTAL                                                1060    485    54%
 
 ======= 105 passed, 4 skipped, 2 warnings in 100.94 seconds =======
-
 ```
 
 ### Build Doxygen doc
 
-```
+```bash
 doxygen doxygen_config
 ```

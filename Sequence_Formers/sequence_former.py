@@ -149,16 +149,6 @@ class Sequence_Former(object):
                 full_y_tr = y_tr_t
                 full_y_va = y_va_t
                 full_y_te = y_te_t
-            else:
-                print("nothing to do here")
-                #print(full_x_tr)
-                #print(x_tr_t)
-                #full_x_tr = torch.cat([full_x_tr, x_tr_t], dim=0)
-                #full_x_va = torch.cat([full_x_va, x_va_t], dim=0)
-                #full_x_te = torch.cat([full_x_te, x_te_t], dim=0)
-                #full_y_tr = torch.cat([full_y_tr, y_tr_t], dim=0)
-                #full_y_va = torch.cat([full_y_va, y_va_t], dim=0)
-                #full_y_te = torch.cat([full_y_te, y_te_t], dim=0)
 
         if not self.path_only:
             print(tasks_tr[0][1].shape)

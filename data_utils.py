@@ -10,18 +10,12 @@ from torchvision import datasets, transforms
 import numpy as np
 import imageio
 
-if os.path.exists("dataset_loaders"):
-    from dataset_loaders.LSUN import load_LSUN
-    from dataset_loaders.cifar10 import load_Cifar10
-    from dataset_loaders.core50 import load_core50
-    from dataset_loaders.fashion import Fashion
-    from dataset_loaders.kmnist import Kmnist
-else:
-    from .dataset_loaders.LSUN import load_LSUN
-    from .dataset_loaders.cifar10 import load_Cifar10
-    from .dataset_loaders.core50 import load_core50
-    from .dataset_loaders.fashion import Fashion
-    from .dataset_loaders.kmnist import Kmnist
+from dataset_loaders.LSUN import load_LSUN
+from dataset_loaders.cifar10 import load_Cifar10
+from dataset_loaders.cifar100 import load_Cifar100
+from dataset_loaders.core50 import load_core50
+from dataset_loaders.fashion import Fashion
+from dataset_loaders.kmnist import Kmnist
 
 
 
@@ -66,7 +60,12 @@ def load_data(dataset, path2data, imageSize=32, path_only=False):
 
         x_tr = x_tr.float()
         x_te = x_te.float()
+    elif dataset == 'cifar100':
+        path2data = os.path.join(path2data, dataset, "processed")
+        x_tr, y_tr, x_te, y_te = load_Cifar100(path2data)
 
+        x_tr = x_tr.float()
+        x_te = x_te.float()
     elif dataset == 'LSUN':
         x_tr, y_tr, x_te, y_te = load_LSUN(path2data)
 

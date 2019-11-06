@@ -23,6 +23,7 @@ class Sequence_Former(object):
         self.dataset = args.dataset
         self.path_only = args.path_only  # only valid for core50 at the moment
         self.task = args.task
+        self.verbose = args.verbose
 
         # if self.path_only we don't load data but just path
         # data will be loaded online while learning
@@ -106,7 +107,7 @@ class Sequence_Former(object):
         y_va_t = self.label_transformation(ind_task, y_tr[i_va])
         y_te_t = self.label_transformation(ind_task, y_te[i_te])
 
-        if self.path_only:
+        if self.verbose and self.path_only:
             print("Task : {}".format(ind_task))
             ind = torch.randperm(len(x_tr_t))[:10]
             print(x_tr_t[ind])
@@ -132,7 +133,7 @@ class Sequence_Former(object):
         full_x_va, full_y_va = None, None
         full_x_te, full_y_te = None, None
 
-        x_tr, y_tr, x_te, y_te = load_data(self.dataset, self.i, self.imageSize, self.path_only)
+        x_tr, y_tr, x_te, y_te = load_data(self.dataset, self.i)
 
         for ind_task in range(self.n_tasks):
 

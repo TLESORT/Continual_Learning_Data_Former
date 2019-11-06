@@ -10,12 +10,20 @@ from torchvision import datasets, transforms
 import numpy as np
 import imageio
 
-from dataset_loaders.LSUN import load_LSUN
-from dataset_loaders.cifar10 import load_Cifar10
-from dataset_loaders.cifar100 import load_Cifar100
-from dataset_loaders.core50 import load_core50
-from dataset_loaders.fashion import Fashion
-from dataset_loaders.kmnist import Kmnist
+if os.path.exists("dataset_loaders"):
+    from dataset_loaders.LSUN import load_LSUN
+    from dataset_loaders.cifar10 import load_Cifar10
+    from dataset_loaders.cifar100 import load_Cifar100
+    from dataset_loaders.core50 import load_core50
+    from dataset_loaders.fashion import Fashion
+    from dataset_loaders.kmnist import Kmnist
+else:
+    from .dataset_loaders.LSUN import load_LSUN
+    from .dataset_loaders.cifar10 import load_Cifar10
+    from .dataset_loaders.cifar100 import load_Cifar100
+    from .dataset_loaders.core50 import load_core50
+    from .dataset_loaders.fashion import Fashion
+    from .dataset_loaders.kmnist import Kmnist
 
 
 
@@ -31,6 +39,7 @@ def check_args(args):
         if args.imageSize == 28:
             args.imageSize = 128
         args.img_channels = 3
+        args.path_only = True
     else:
         raise Exception("[!] There is no option for " + args.dataset)
 
@@ -53,7 +62,7 @@ def check_and_Download_data(folder, dataset, task):
         if not os.path.isdir(folder):
             print('This dataset should be downloaded manually')
 
-def load_data(dataset, path2data, imageSize=32, path_only=False):
+def load_data(dataset, path2data):
     if dataset == 'cifar10':
         path2data = os.path.join(path2data, dataset, "processed")
         x_tr, y_tr, x_te, y_te = load_Cifar10(path2data)
@@ -73,7 +82,7 @@ def load_data(dataset, path2data, imageSize=32, path_only=False):
         x_te = x_te.float()
     elif dataset == 'core50' or dataset == 'core10':
 
-        x_tr, y_tr, x_te, y_te = load_core50(dataset, path2data, imageSize=imageSize, path_only=path_only)
+        x_tr, y_tr, x_te, y_te = load_core50(dataset, path2data)
 
     elif dataset == 'mnist_fellowship':
         # In this case data will be loaded later dataset by dataset

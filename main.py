@@ -40,6 +40,7 @@ parser.add_argument('--disjoint_classes', default=False, type=bool, help='In som
 parser.add_argument('--path_only', action='store_true', default=False, help='when dataset is to big data may not be  '
                                                                             'preprocessed quickly, so we preprocess only '
                                                                             'images path and image will be loaded online')
+parser.add_argument('--verbose', action='store_true', default=False, help='print out some more execution information')
 args = parser.parse_args()
 
 args = check_args(args)

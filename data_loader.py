@@ -272,9 +272,6 @@ class DatasetLoader(data.Dataset):
         for i in range(1, self.n_tasks):
             _, inverse_permutation = permutations[i].sort()
             reordered_data = deepcopy(data.index_select(1, inverse_permutation))
-            print("hope you're in shape")
-            print(reordered_data.shape)
-            print(concat.shape)
             concat = torch.cat((concat, reordered_data), 0)
 
         if shape[2] == 1:
@@ -330,18 +327,24 @@ class DatasetLoader(data.Dataset):
 
     def sanity_check(self, origin):
 
-        if not self.dataset[self.current_task][1].size(0) == self.dataset[self.current_task][2].size(0):
-            raise AssertionError("Sanity check size data ({}) vs label ({}) : {}".format(self.dataset[self.current_task][1].size(0),
-                                                                          self.dataset[self.current_task][2].size(0),
-                                                                          origin))
+        if self.load_images:
+            size_data = len(self.dataset[self.current_task][1])
+        else:
+            size_data = self.dataset[self.current_task][1].size(0)
+        size_label = self.dataset[self.current_task][2].size(0)
 
-        if not self.list_IDs[max(self.list_IDs, key=self.list_IDs.get)] + 1 == self.dataset[self.current_task][2].size(0):
+        biggest_data_id = self.list_IDs[max(self.list_IDs, key=self.list_IDs.get)]
+
+        if not size_label == size_data:
+            raise AssertionError("Sanity check size data ({}) vs label ({}) : {}".format(size_data, size_label, origin))
+
+        if not biggest_data_id + 1 == size_data:
             raise AssertionError("Sanity check list_IDs ({}) vs label ({}) : {}".format(
-                self.list_IDs[max(self.list_IDs, key=self.list_IDs.get) + 1],
-                self.dataset[self.current_task][2].size(0),
+                biggest_data_id + 1,
+                size_label,
                 origin))
 
         if not len(self.labels) == self.dataset[self.current_task][2].size(0):
             raise AssertionError("Sanity check list label ({}) vs label ({}) : {}".format(len(self.labels),
-                                                                           self.dataset[self.current_task][2].size(0),
+                                                                           size_label,
                                                                            origin))

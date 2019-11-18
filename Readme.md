@@ -130,7 +130,7 @@ for t, (data, target) in enumerate(train_loader):
 
 ### Run Tests
 
-```python
+```bash
 # First you need to generate the base datasets with the following commands
 python main.py --dataset MNIST --n_tasks 10 --task disjoint
 python main.py --dataset fashion --n_tasks 10 --task disjoint

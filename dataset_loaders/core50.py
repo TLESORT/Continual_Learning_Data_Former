@@ -3,6 +3,134 @@ import torch
 import numpy as np
 import pickle as pkl
 
+def get_train_test_ind(paths):
+    """
+    Select from the list of all files the train and test files
+    :param paths: all files
+    :return: list of train and list of test data
+    """
+    list_train = []
+    list_test = []
+
+    for i in range(len(paths)):
+        str_path = paths[i]
+        str_sequence = str_path.split('/')[0]
+        int_sequence = int(str_sequence.replace('s', ''))
+
+        # sequence 3,7,10 are for test as in the original paper
+        if int_sequence == 3 or int_sequence == 7 or int_sequence == 10:
+            list_test.append(i)
+        elif int_sequence <= 11:
+            list_train.append(i)
+        else:
+            print("There is a problem")
+
+    return list_train, list_test
+
+def get_list_labels(paths, num_classes):
+    """
+    create a list with all labels from paths
+    :param paths: path to all images
+    :param num_classes: number of classes considered (an be either 10 or 50)
+    :return: the list of labels
+    """
+
+
+    # ex : paths[0] -> 's11/o1/C_11_01_000.png'
+
+    # [o1, ..., o5] -> plug adapters  -> label 1
+    # [o6, ..., o10] -> mobile phones
+    # [o11, ..., o15] -> scissors
+    # [o16, ..., o20] -> light bulbs
+    # [o21, ..., o25] -> cans
+    # [o26, ..., o30] -> glasses
+    # [o31, ..., o35] -> balls
+    # [o36, ..., o40] -> markers
+    # [o41, ..., o45] -> cups
+    # [o46, ..., o50] -> remote controls
+
+    list_labels = []
+    for i in range(len(paths)):
+        str_path = paths[i]  # Ex: 's11/o1/C_11_01_000.png'
+        str_label = str_path.split('/')[1]  # -> 'o1'
+        int_label = int(str_label.replace('o', ''))  # -> 1
+
+        # We remap from 1 to 50 from 0 to 9
+        if num_classes == 10:
+            list_labels.append((int_label - 1) // 5)
+        else:  # We remap from 1 to 50 from 0 to 49
+            list_labels.append(int_label - 1)
+
+    return list_labels
+
+def reduce_data_size(paths):
+    """
+    select one image over 4 to reduce dataset size and redundancy
+    :param paths: all paths
+    :return:
+    """
+    new_path = []
+    for i, path in enumerate(paths):
+        # we go from 20 Hz to 5 hz following https://arxiv.org/pdf/1805.10966.pdf
+        if i % 4 == 0:
+            new_path.append(path)
+    return new_path
+
+def create_set(image_path, path, paths, list_data, list_label, name):
+    """
+    Pick the right files, create a list with it and save it.
+    :param image_path: path to the folder containing all images
+    :param path: path path to the folder ta save results
+    :param paths: path inside image_path to all images
+    :param list_data: list of index to select
+    :param list_label: list of all labels
+    :param name: name to give to the file to save
+    :return: None
+    """
+
+    selected_labels = np.zeros(len(list_data))
+    selected_path = []
+
+    # train data
+    for i, ind in enumerate(list_data):
+        label = list_label[ind]
+        selected_labels[i] = label
+        selected_path.append(os.path.join(image_path, paths[ind]))
+
+    save_path = path.replace("raw", "processed")
+
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+
+    np.savez(os.path.join(save_path, name), y=selected_labels, paths=selected_path)
+
+def check_data_avaibility(image_path, path_path):
+    """
+    Check avaibility of main folders and files
+    :param image_path: path to the folder containing all images
+    :param path_path: path to the file containing path to all images
+    :return: None
+    """
+
+    if not os.path.isfile(path_path):
+        raise AssertionError("paths.pkl have to be downloaded in https://vlomonaco.github.io/core50/index.html#dataset"
+                             " and put in '{}' ".format(path_path))
+
+    # test if all folders exists
+    folders_exists = True
+    # 11 sequences
+    for i in range(1, 11):
+        # 50 objects
+        for j in range(1, 50):
+            folder = os.path.join(image_path, "s" + str(i), "o" + str(j))
+            if not os.path.isdir(folder):
+                print("Missing folder {}".format(folder))
+                folders_exists = False
+    if not folders_exists:
+        raise AssertionError("Some folder are missing and probable some data to download then in"
+                             " https://vlomonaco.github.io/core50/index.html#dataset"
+                             " and put in{}".format(image_path))
+
 
 def create_data_sets(path, num_classes):
     """
@@ -20,115 +148,34 @@ def create_data_sets(path, num_classes):
     image_path = path.replace("core10", "core50")
     path_path = os.path.join(path, 'paths.pkl').replace("core10", "core50")
 
-    if not os.path.isfile(path_path):
-        raise AssertionError("paths.pkl have to be downloaded in https://vlomonaco.github.io/core50/index.html#dataset"
-                             " and put in {}".format(path_path))
-
-    # test if all folders exists
-    folders_exists = True
-    # 11 sequences
-    for i in range(1, 11):
-        # 50 objects
-        for j in range(1, 50):
-            folder = os.path.join(image_path, "s"+str(i), "o"+str(j))
-            if not os.path.isdir(folder):
-                print("Missing folder {}".format(folder))
-                folders_exists = False
-    if not folders_exists:
-        raise AssertionError("Some folder are missing and probable some data to download then in"
-                             " https://vlomonaco.github.io/core50/index.html#dataset"
-                             " and put in{}".format(image_path))
+    # check if main repository already exists
+    check_data_avaibility(image_path, path_path)
 
 
     pkl_file = open(path_path, 'rb')
     paths = pkl.load(pkl_file)
 
-    ###################  Reduction of data size
-    new_path = []
-    for i in range(len(paths)):
-        # we go from 20 Hz to 5 hz following https://arxiv.org/pdf/1805.10966.pdf
-        if i % 4 == 0:
-            new_path.append(paths[i])
-    paths = new_path
-
-    # ex : paths[0] -> 's11/o1/C_11_01_000.png'
-
-    # [o1, ..., o5] -> plug adapters  -> label 1
-    # [o6, ..., o10] -> mobile phones
-    # [o11, ..., o15] -> scissors
-    # [o16, ..., o20] -> light bulbs
-    # [o21, ..., o25] -> cans
-    # [o26, ..., o30] -> glasses
-    # [o31, ..., o35] -> balls
-    # [o36, ..., o40] -> markers
-    # [o41, ..., o45] -> cups
-    # [o46, ..., o50] -> remote controls
+    #  Reduction of data size (because there is a lot of similarities between two images)
+    paths = reduce_data_size(paths)
 
     # first : get labels
-    list_label = []
-    for i in range(len(paths)):
-        str_path = paths[i]  # Ex: 's11/o1/C_11_01_000.png'
-        str_label = str_path.split('/')[1]  # -> 'o1'
-        int_label = int(str_label.replace('o', ''))  # -> 1
-
-        # We remap from 1 to 50 from 0 to 9
-        if num_classes == 10:
-            list_label.append((int_label - 1) // 5)
-        else:  # We remap from 1 to 50 from 0 to 49
-            list_label.append(int_label - 1)
+    list_label = get_list_labels(paths, num_classes)
 
     # second : separate test (sequences #3, #7, #10) from train
-    list_train = []
-    list_test = []
-
-    for i in range(len(paths)):
-        str_path = paths[i]
-        str_sequence = str_path.split('/')[0]
-        int_sequence = int(str_sequence.replace('s', ''))
-
-        # sequence 3,7,10 are for test as in the original paper
-        if int_sequence == 3 or int_sequence == 7 or int_sequence == 10:
-            list_test.append(i)
-        elif int_sequence <= 11:
-            list_train.append(i)
-        else:
-            print("There is a problem")
-
-    train_label = np.zeros(len(list_train))
-    train_path = []
-
-    test_label = np.zeros(len(list_test))
-    test_path = []
+    list_train, list_test = get_train_test_ind(paths)
 
     print("We start creating the train set")
-
-    # train data
-    for i in range(len(list_train)):
-        ind = list_train[i]
-        label = list_label[ind]
-        train_label[i] = label
-        train_path.append(os.path.join(image_path, paths[ind]))
-
-    save_path = path.replace("raw", "processed")
-
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-
-    np.savez(os.path.join(save_path, name_dataset+'_paths_train.npz'), y=train_label, paths=train_path)
-
+    create_set(image_path, path, paths, list_train, list_label, name=name_dataset + '_paths_train.npz')
     print("We start creating the test set")
-
-    # test data
-    for i in range(len(list_test)):
-        ind = list_test[i]
-        label = list_label[ind]
-        test_label[i] = label
-        test_path.append(os.path.join(image_path, paths[ind]))
-
-    np.savez(os.path.join(save_path, name_dataset+'_paths_test.npz'), y=test_label, paths=test_path)
+    create_set(image_path, path, paths, list_test, list_label, name=name_dataset + '_paths_test.npz')
 
 
 def load_path(path):
+    """
+    Load the file containing the path to all data
+    :param path: path to the file
+    :return: list of files and a tensor of labels
+    """
     path_tr = np.load(path)['paths']
     y_tr = np.load(path)['y']
     y_tr = y_tr.reshape((-1))

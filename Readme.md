@@ -17,8 +17,8 @@ It makes programming easier and code cleaner.
 
 ### Example
 
-![](/Samples/disjoint_5_tasks/MNIST_Task_0.png)  | 
-![](/Samples/disjoint_5_tasks/MNIST_Task_1.png)  
+![](/Samples/disjoint_5_tasks/MNIST_task_0.png)  | 
+![](/Samples/disjoint_5_tasks/MNIST_task_1.png)  
 :-------------------------:|:-------------------------:
 Task 0 | Task 1
 

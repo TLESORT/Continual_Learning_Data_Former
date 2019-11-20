@@ -17,10 +17,9 @@ It makes programming easier and code cleaner.
 
 ### An example with MNIST 5 dijoint tasks
 
-
-<img src="/Samples/disjoint_5_tasks/MNIST_task_0.png" width="150">|<img src="/Samples/disjoint_5_tasks/MNIST_task_1.png" width="150">|<img src="/Samples/disjoint_5_tasks/MNIST_task_2.png" width="150">|<img src="/Samples/disjoint_5_tasks/MNIST_task_3.png" width="150">|<img src="/Samples/disjoint_5_tasks/MNIST_task_4.png" width="150">    
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-Task 0 | Task 1 | Task 2 | Task 3 | Task 4
+|<img src="/Samples/disjoint_5_tasks/MNIST_task_0.png" width="150">|<img src="/Samples/disjoint_5_tasks/MNIST_task_1.png" width="150">|<img src="/Samples/disjoint_5_tasks/MNIST_task_2.png" width="150">|<img src="/Samples/disjoint_5_tasks/MNIST_task_3.png" width="150">|<img src="/Samples/disjoint_5_tasks/MNIST_task_4.png" width="150">|    
+|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|
+|Task 0 | Task 1 | Task 2 | Task 3 | Task 4|
 
 More examples at [Samples](/Samples)
 

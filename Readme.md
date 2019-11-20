@@ -18,9 +18,16 @@ It makes programming easier and code cleaner.
 ### Example
 
 ![](/Samples/disjoint_5_tasks/MNIST_task_0.png)  | 
-![](/Samples/disjoint_5_tasks/MNIST_task_1.png)  
-:-------------------------:|:-------------------------:
-Task 0 | Task 1
+![](/Samples/disjoint_5_tasks/MNIST_task_1.png)  | 
+![](/Samples/disjoint_5_tasks/MNIST_task_2.png)    | 
+![](/Samples/disjoint_5_tasks/MNIST_task_3.png)    | 
+![](/Samples/disjoint_5_tasks/MNIST_task_4.png)    
+:-------------------------:|
+:-------------------------:|
+:-------------------------:|
+:-------------------------:|
+:-------------------------:
+Task 0 | Task 1 | Task 2 | Task 3 | Task 4
 
 
 ### Datasets

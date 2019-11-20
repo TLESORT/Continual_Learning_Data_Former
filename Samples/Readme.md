@@ -1,7 +1,4 @@
-
-
 # Samples Examples
-
 
 ### The MNIST Fellowship
 
@@ -24,4 +21,3 @@
 |<img src="/Samples/5_tasks/MNIST_permutations_task_0.png" width="150">|<img src="/Samples/5_tasks/MNIST_permutations_task_1.png" width="150">|<img src="/Samples/5_tasks/MNIST_permutations_task_2.png" width="150">|<img src="/Samples/5_tasks/MNIST_permutations_task_3.png" width="150">|<img src="/Samples/5_tasks/MNIST_permutations_task_4.png" width="150">|   
 |:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|
 |Task 0 | Task 1 | Task 2 | Task 3 | Task 4|
-

@@ -35,7 +35,6 @@ def get_list_labels(paths, num_classes):
     :return: the list of labels
     """
 
-
     # ex : paths[0] -> 's11/o1/C_11_01_000.png'
 
     # [o1, ..., o5] -> plug adapters  -> label 1
@@ -50,8 +49,8 @@ def get_list_labels(paths, num_classes):
     # [o46, ..., o50] -> remote controls
 
     list_labels = []
-    for i in range(len(paths)):
-        str_path = paths[i]  # Ex: 's11/o1/C_11_01_000.png'
+    for i, str_path in enumerate(paths):
+        # Ex: str_path = 's11/o1/C_11_01_000.png'
         str_label = str_path.split('/')[1]  # -> 'o1'
         int_label = int(str_label.replace('o', ''))  # -> 1
 

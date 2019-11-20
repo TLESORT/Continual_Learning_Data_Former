@@ -1,5 +1,3 @@
-
-
 ## Run Tests
 
 Command to run from the main folder!

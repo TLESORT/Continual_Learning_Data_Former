@@ -23,6 +23,22 @@ def test_disjoint_samples_train_10_tasks(dataset, ind_task):
     path_out = os.path.join(folder, "{}_task_{}.png".format(dataset, ind_task))
     data_set.visualize_sample(path_out, number=100, shape=[28, 28, 1])
 
+@pytest.mark.parametrize("dataset", ["MNIST"])
+@pytest.mark.parametrize("ind_task", [0, 1, 2, 3, 4])
+def test_disjoint_samples_train_5_tasks(dataset, ind_task):
+    path = "./Archives/Data/Tasks/{}/disjoint_5_train.pt".format(dataset)
+    data = torch.load(path)
+    data_set = DatasetLoader(data, current_task=0, transform=None, load_images=False, path=None)
+
+    data_set.set_task(ind_task)
+
+    folder = "./Samples/disjoint_5_tasks/"
+
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+
+    path_out = os.path.join(folder, "{}_task_{}.png".format(dataset, ind_task))
+    data_set.visualize_sample(path_out, number=100, shape=[28, 28, 1])
 
 # @pytest.mark.parametrize("task", ["permutations", "rotations"])
 # command rotation : python main.py --task rotations --n_tasks 5 --dataset MNIST
@@ -30,7 +46,7 @@ def test_disjoint_samples_train_10_tasks(dataset, ind_task):
 @pytest.mark.parametrize("task", ["permutations", "rotations"])
 @pytest.mark.parametrize("dataset", ["MNIST"])
 @pytest.mark.parametrize("ind_task", [0, 1, 2, 3, 4])
-def test_disjoint_samples_train_5_tasks(task, dataset, ind_task):
+def test_disjoint_perm_samples_train_5_tasks(task, dataset, ind_task):
     path = "./Archives/Data/Tasks/{}/{}_5_train.pt".format(dataset, task)
     data = torch.load(path)
     data_set = DatasetLoader(data, current_task=0, transform=None, load_images=False, path=None)

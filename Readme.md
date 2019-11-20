@@ -15,16 +15,14 @@ It makes programming easier and code cleaner.
 -   **Permutations tasks** : each tasks propose same data but with different permutations of pixels
 -   **Mnist Fellowship task** : each task is a new mnist like dataset (this sequence of task is an original contribution of this repository)
 
-### Example
+### An example with MNIST 5 dijoint tasks
 
 
-
-Just use:
-
-<img src="/Samples/disjoint_5_tasks/MNIST_task_0.png" width="150">  | <img src="/Samples/disjoint_5_tasks/MNIST_task_1.png" width="150">  | <img src="/Samples/disjoint_5_tasks/MNIST_task_2.png" width="150">  | <img src="/Samples/disjoint_5_tasks/MNIST_task_3.png" width="150">  | <img src="/Samples/disjoint_5_tasks/MNIST_task_4.png" width="150">    
+<img src="/Samples/disjoint_5_tasks/MNIST_task_0.png" width="150">|<img src="/Samples/disjoint_5_tasks/MNIST_task_1.png" width="150">|<img src="/Samples/disjoint_5_tasks/MNIST_task_2.png" width="150">|<img src="/Samples/disjoint_5_tasks/MNIST_task_3.png" width="150">|<img src="/Samples/disjoint_5_tasks/MNIST_task_4.png" width="150">    
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 Task 0 | Task 1 | Task 2 | Task 3 | Task 4
 
+More examples at [Samples](/Samples)
 
 ### Datasets
 

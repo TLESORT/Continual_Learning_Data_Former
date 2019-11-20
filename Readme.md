@@ -15,6 +15,14 @@ It makes programming easier and code cleaner.
 -   **Permutations tasks** : each tasks propose same data but with different permutations of pixels
 -   **Mnist Fellowship task** : each task is a new mnist like dataset (this sequence of task is an original contribution of this repository)
 
+### Example
+
+![](https://github.com/TLESORT/Continual_Learning_Data_Former/tree/master/Samples/disjoint_5_tasks/MNIST_Task_0)  | 
+![](https://github.com/TLESORT/Continual_Learning_Data_Former/tree/master/Samples/disjoint_5_tasks/MNIST_Task_1)  
+:-------------------------:|:-------------------------:
+Task 0 | Task 1
+
+
 ### Datasets
 
 -   Mnist

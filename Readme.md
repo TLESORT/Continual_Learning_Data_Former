@@ -17,8 +17,8 @@ It makes programming easier and code cleaner.
 
 ### Example
 
-![](https://github.com/TLESORT/Continual_Learning_Data_Former/tree/master/Samples/disjoint_5_tasks/MNIST_Task_0)  | 
-![](https://github.com/TLESORT/Continual_Learning_Data_Former/tree/master/Samples/disjoint_5_tasks/MNIST_Task_1)  
+![](https://github.com/TLESORT/Continual_Learning_Data_Former/blob/master/Samples/disjoint_5_tasks/MNIST_Task_0)  | 
+![](https://github.com/TLESORT/Continual_Learning_Data_Former/blob/master/Samples/disjoint_5_tasks/MNIST_Task_1)  
 :-------------------------:|:-------------------------:
 Task 0 | Task 1
 

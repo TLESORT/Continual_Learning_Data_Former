@@ -17,11 +17,15 @@ It makes programming easier and code cleaner.
 
 ### Example
 
-![](/Samples/disjoint_5_tasks/MNIST_task_0.png)  | 
-![](/Samples/disjoint_5_tasks/MNIST_task_1.png)  | 
-![](/Samples/disjoint_5_tasks/MNIST_task_2.png)    | 
-![](/Samples/disjoint_5_tasks/MNIST_task_3.png)    | 
-![](/Samples/disjoint_5_tasks/MNIST_task_4.png)    
+
+
+Just use:
+
+<img src="/Samples/disjoint_5_tasks/MNIST_task_0.png" width="200">  | 
+<img src="/Samples/disjoint_5_tasks/MNIST_task_1.png" width="200">  | 
+<img src="/Samples/disjoint_5_tasks/MNIST_task_2.png" width="200">  | 
+<img src="/Samples/disjoint_5_tasks/MNIST_task_3.png" width="200">  | 
+<img src="/Samples/disjoint_5_tasks/MNIST_task_4.png" width="200">    
 :-------------------------:|
 :-------------------------:|
 :-------------------------:|

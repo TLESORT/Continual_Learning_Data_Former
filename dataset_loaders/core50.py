@@ -12,8 +12,7 @@ def get_train_test_ind(paths):
     list_train = []
     list_test = []
 
-    for i in range(len(paths)):
-        str_path = paths[i]
+    for i, str_path in enumerate(paths):
         str_sequence = str_path.split('/')[0]
         int_sequence = int(str_sequence.replace('s', ''))
 
@@ -49,7 +48,7 @@ def get_list_labels(paths, num_classes):
     # [o46, ..., o50] -> remote controls
 
     list_labels = []
-    for i, str_path in enumerate(paths):
+    for str_path in paths:
         # Ex: str_path = 's11/o1/C_11_01_000.png'
         str_label = str_path.split('/')[1]  # -> 'o1'
         int_label = int(str_label.replace('o', ''))  # -> 1

@@ -22,7 +22,7 @@ It makes programming easier and code cleaner.
 -   kmnist
 -   cifar10
 -   mnishion : concatenation of Mnist and Fashion-Mnist
--   core50 (in developpment)
+-   Core50/Core10
 
 ### Some supplementary option are possible
 -   The number of tasks can be choosed (1, 3, 5 and 10 have been tested normally)

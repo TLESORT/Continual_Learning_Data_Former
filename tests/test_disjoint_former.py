@@ -18,6 +18,7 @@ class args(object):
         self.dir = None
         self.dataset = None
         self.path_only = None
+        self.verbose = False
 
     def set_paths(self):
 

@@ -21,11 +21,11 @@ It makes programming easier and code cleaner.
 
 Just use:
 
-<img src="/Samples/disjoint_5_tasks/MNIST_task_0.png" width="200">  | 
-<img src="/Samples/disjoint_5_tasks/MNIST_task_1.png" width="200">  | 
-<img src="/Samples/disjoint_5_tasks/MNIST_task_2.png" width="200">  | 
-<img src="/Samples/disjoint_5_tasks/MNIST_task_3.png" width="200">  | 
-<img src="/Samples/disjoint_5_tasks/MNIST_task_4.png" width="200">    
+<img src="/Samples/disjoint_5_tasks/MNIST_task_0.png" width="150">  | 
+<img src="/Samples/disjoint_5_tasks/MNIST_task_1.png" width="150">  | 
+<img src="/Samples/disjoint_5_tasks/MNIST_task_2.png" width="150">  | 
+<img src="/Samples/disjoint_5_tasks/MNIST_task_3.png" width="150">  | 
+<img src="/Samples/disjoint_5_tasks/MNIST_task_4.png" width="150">    
 :-------------------------:|
 :-------------------------:|
 :-------------------------:|

@@ -21,7 +21,7 @@ parser.add_argument('--i', default='Data', help='input directory')
 parser.add_argument('--index_permutation', default=None, type=int)
 parser.add_argument('--task', default='disjoint',
                     choices=['rotations', 'permutations', 'disjoint_rotations', 'disjoint_mnishion',
-                             'disjoint', "mnist_fellowship", 'disjoint_classes_permutations'],
+                             'disjoint', "mnist_fellowship", "mnist_fellowship_merge", 'disjoint_classes_permutations'],
                     help='type of task to create', )
 parser.add_argument('--dataset', default='MNIST', type=str,
                     choices=['MNIST', 'fashion', 'core10', 'core50', 'cifar100', 'cifar10', 'mnishion', "kmnist", "mnist_fellowship"])
@@ -68,7 +68,7 @@ elif args.task == 'permutations':
     DataFormatter = Permutations(args)
 elif args.task == 'disjoint':
     DataFormatter = Disjoint(args)
-elif args.task == 'mnist_fellowship':
+elif 'mnist_fellowship' in args.task:
     DataFormatter = MnistFellowship(args)
 elif args.task == 'disjoint_rotations':
     DataFormatter = DisjointRotations(args)

@@ -12,7 +12,13 @@ class MnistFellowship(Sequence_Former):
     def __init__(self, args):
         super(MnistFellowship, self).__init__(args)
 
-        self.disjoint_classes = args.disjoint_classes
+        if args.task == "mnist_fellowship_merge":
+            # all classes 0 stay class 0
+            self.disjoint_classes = False
+        else:
+            # all classes 0 will be splat into 0, 10, 20
+            self.disjoint_classes = True
+
 
         if not self.num_classes == 10:
             raise AssertionError("Wrong number of classes for this experiment")
@@ -51,6 +57,6 @@ class MnistFellowship(Sequence_Former):
             self.dataset = 'kmnist'
 
         # we load a new dataset for each task
-        x_tr, y_tr, x_te, y_te = load_data(self.dataset, self.i, self.imageSize, self.path_only)
+        x_tr, y_tr, x_te, y_te = load_data(self.dataset, self.i)
 
         return super().create_task(ind_task, x_tr, y_tr, x_te, y_te)

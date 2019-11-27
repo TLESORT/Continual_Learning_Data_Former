@@ -296,7 +296,7 @@ class DatasetLoader(data.Dataset):
         return self
 
     def sub_sample(self, number):
-        indices = torch.randperm(len(self))[0:number]
+        indices = (torch.randperm(len(self.list_IDs))[0:number]).tolist()
 
         # subsamples the list (not the data)
         self.all_task_IDs[self.current_task] = {i: self.list_IDs[indices[i]] for i in range(number)}

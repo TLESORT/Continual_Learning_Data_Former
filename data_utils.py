@@ -28,7 +28,7 @@ else:
 
 
 def check_args(args):
-    if args.dataset == 'MNIST' or args.dataset == 'fashion' or args.dataset == 'kmnist' or args.dataset == 'mnishion' or args.task == "mnist_fellowship":
+    if args.dataset == 'MNIST' or args.dataset == 'fashion' or args.dataset == 'mnishion' or "mnist" in args.task:
         args.imageSize = 28
         args.img_channels = 1
     elif args.dataset == 'cifar10' or args.dataset == 'cifar100':
@@ -43,20 +43,22 @@ def check_args(args):
     else:
         raise Exception("[!] There is no option for " + args.dataset)
 
-    if args.task == "mnist_fellowship":
+    if "mnist_fellowship" in args.task:
         args.dataset = "mnist_fellowship"
+        if 'merge' in args.task:
+            args.dataset = "mnist_fellowship_merge"
 
     return args
 
 
 def check_and_Download_data(folder, dataset, task):
     # download data if possible
-    if dataset == 'MNIST' or dataset == 'mnishion' or task == "mnist_fellowship":
-        datasets.MNIST(folder, train=True, download=True, transform=transforms.ToTensor())
-    if dataset == 'fashion' or dataset == 'mnishion' or task == "mnist_fellowship":
+    if dataset == 'MNIST' or dataset == 'mnishion' or "mnist_fellowship" in task:
+        datasets.MNIST(os.path.join(folder, "MNIST"), train=True, download=True, transform=transforms.ToTensor())
+    if dataset == 'fashion' or dataset == 'mnishion' or "mnist_fellowship" in task:
         Fashion(os.path.join(folder, "fashion"), train=True, download=True, transform=transforms.ToTensor())
     # download data if possible
-    if dataset == 'kmnist' or task == "mnist_fellowship":
+    if dataset == 'kmnist' or "mnist_fellowship" in task:
         Kmnist(os.path.join(folder, "kmnist"), train=True, download=True, transform=transforms.ToTensor())
     if dataset == 'core50' or dataset == 'core10':
         if not os.path.isdir(folder):
@@ -84,7 +86,7 @@ def load_data(dataset, path2data):
 
         x_tr, y_tr, x_te, y_te = load_core50(dataset, path2data)
 
-    elif dataset == 'mnist_fellowship':
+    elif 'mnist_fellowship' in dataset:
         # In this case data will be loaded later dataset by dataset
         return None, None, None, None
     else:

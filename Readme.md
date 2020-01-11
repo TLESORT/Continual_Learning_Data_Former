@@ -1,6 +1,7 @@
 ## Continual Learning Data Former
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9273eb0f97b946308248b0007e054e54)](https://app.codacy.com/app/TLESORT/Continual_Learning_Data_Former?utm_source=github.com&utm_medium=referral&utm_content=TLESORT/Continual_Learning_Data_Former&utm_campaign=Badge_Grade_Dashboard)
+[![DOI](https://zenodo.org/badge/198824802.svg)](https://zenodo.org/badge/latestdoi/198824802)
 
 This repositery proprose several script to create sequence of tasks for continual learning. The spirit is the following : 
 Instead of managing the sequence of tasks while learning, we create the sequence of tasks first and then we load tasks 
@@ -125,13 +126,16 @@ for t, (data, target) in enumerate(train_loader):
 ### Citing the Project
 
 ```Array.<string>
-@misc{continual-learning-data-former,
-  author = {Lesort, Timothée},
-  title = {Continual Learning Data Former},
-  year = {2019},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/TLESORT/Continual_Learning_Data_Former}},
+@software{tlesort_2020_3605202,
+  author       = {TLESORT and
+                  Codacy Badger},
+  title        = {TLESORT/Continual\_Learning\_Data\_Former v1.0},
+  month        = jan,
+  year         = 2020,
+  publisher    = {Zenodo},
+  version      = {v1.0},
+  doi          = {10.5281/zenodo.3605202},
+  url          = {https://doi.org/10.5281/zenodo.3605202}
 }
 
 ```

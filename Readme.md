@@ -127,8 +127,7 @@ for t, (data, target) in enumerate(train_loader):
 
 ```Array.<string>
 @software{tlesort_2020_3605202,
-  author       = {TLESORT and
-                  Codacy Badger},
+  author       = {Timoth\'{e}e LESORT},
   title        = {TLESORT/Continual\_Learning\_Data\_Former v1.0},
   month        = jan,
   year         = 2020,

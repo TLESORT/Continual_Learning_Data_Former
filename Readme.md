@@ -126,9 +126,9 @@ for t, (data, target) in enumerate(train_loader):
 ### Citing the Project
 
 ```Array.<string>
-@software{tlesort_2020_3605202,
-  author       = {Timoth\'{e}e LESORT},
-  title        = {TLESORT/Continual\_Learning\_Data\_Former v1.0},
+@software{timothee_lesort_2020_3605202,
+  author       = {Timothée LESORT},
+  title        = {Continual Learning Data Former},
   month        = jan,
   year         = 2020,
   publisher    = {Zenodo},

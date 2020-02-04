@@ -40,6 +40,8 @@ def check_args(args):
             args.imageSize = 128
         args.img_channels = 3
         args.path_only = True
+    elif args.dataset == 'mnist_fellowship':
+        pass
     else:
         raise Exception("[!] There is no option for " + args.dataset)
 

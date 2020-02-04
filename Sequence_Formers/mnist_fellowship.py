@@ -15,13 +15,16 @@ class MnistFellowship(Sequence_Former):
         if args.task == "mnist_fellowship_merge":
             # all classes 0 stay class 0
             self.disjoint_classes = False
+            if not self.num_classes == 10:
+                raise AssertionError("Wrong number of classes for this experiment")
         else:
             # all classes 0 will be splat into 0, 10, 20
             self.disjoint_classes = True
+            if not self.num_classes == 30:
+                raise AssertionError("Wrong number of classes for this experiment")
 
 
-        if not self.num_classes == 10:
-            raise AssertionError("Wrong number of classes for this experiment")
+
 
     def select_index(self, ind_task, y):
 

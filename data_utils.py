@@ -56,7 +56,7 @@ def check_args(args):
 def check_and_Download_data(folder, dataset, task):
     # download data if possible
     if dataset == 'MNIST' or dataset == 'mnishion' or "mnist_fellowship" in task:
-        datasets.MNIST(os.path.join(folder, "MNIST"), train=True, download=True, transform=transforms.ToTensor())
+        datasets.MNIST(os.path.join(folder), train=True, download=True, transform=transforms.ToTensor())
     if dataset == 'fashion' or dataset == 'mnishion' or "mnist_fellowship" in task:
         Fashion(os.path.join(folder, "fashion"), train=True, download=True, transform=transforms.ToTensor())
     # download data if possible

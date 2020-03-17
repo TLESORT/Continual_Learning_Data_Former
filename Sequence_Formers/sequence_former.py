@@ -38,20 +38,15 @@ class Sequence_Former(ContinuumSetLoader):
             os.makedirs(self.o)
 
         if self.train:
-            self.o = os.path.join(self.o, '{}_{}_train{}.pt'.format(self.scenario, self.tasks_number, light_id))
+            self.out_file = os.path.join(self.o, '{}_{}_train{}.pt'.format(self.scenario, self.tasks_number, light_id))
         else:
-            #self.o_valid = os.path.join(self.o, '{}_{}_valid{}.pt'.format(self.scenario, self.tasks_number, light_id))
-            self.o_test = os.path.join(self.o, '{}_{}_test{}.pt'.format(self.scenario, self.tasks_number, light_id))
-
-        #self.o_train_full = os.path.join(self.o, '{}_1-{}_train{}.pt'.format(self.scenario, self.tasks_number, light_id))
-        #self.o_valid_full = os.path.join(self.o, '{}_1-{}_valid{}.pt'.format(self.scenario, self.tasks_number, light_id))
-        #self.o_test_full = os.path.join(self.o, '{}_1-{}_test{}.pt'.format(self.scenario, self.tasks_number, light_id))
+            self.out_file = os.path.join(self.o, '{}_{}_test{}.pt'.format(self.scenario, self.tasks_number, light_id))
 
         check_and_Download_data(self.i, self.dataset, task=self.scenario)
         self.formating_data()
 
 
-        super(Sequence_Former, self).__init__(self.data)
+        super(Sequence_Former, self).__init__(self.continuum)
 
 
 
@@ -71,7 +66,7 @@ class Sequence_Former(ContinuumSetLoader):
         :param data: data to process
         :return: data post processing
         """
-        if not ind_task < self.n_tasks:
+        if not ind_task < self.tasks_number:
             raise AssertionError("Error in task indice")
         return deepcopy(data)
 
@@ -82,7 +77,7 @@ class Sequence_Former(ContinuumSetLoader):
         :param label: label to process
         :return: data post processing
         """
-        if not ind_task < self.n_tasks:
+        if not ind_task < self.tasks_number:
             raise AssertionError("Error in task indice")
         return label
 
@@ -134,56 +129,17 @@ class Sequence_Former(ContinuumSetLoader):
 
         # variable to save the sequence
         self.continuum = []
-        #self.tasks_tr = []
-        #self.tasks_va = []
-        #self.tasks_te = []
-
-        # variable to save the cumul of the sequence for upperbound
-        # tasks_tr_full = []
-        # tasks_va_full = []
-        # tasks_te_full = []
-        # full_x_tr, full_y_tr = None, None
-        # full_x_va, full_y_va = None, None
-        # full_x_te, full_y_te = None, None
 
         x_, y_ = load_data(self.dataset, self.i, self.train)
 
-        for ind_task in range(self.n_tasks):
+        for ind_task in range(self.tasks_number):
 
-            c1, c2, x_tr_t, y_tr_t, x_va_t, y_va_t, x_te_t, y_te_t = self.create_task(ind_task, x_tr, y_tr, x_te, y_te)
-
-            self.tasks_tr.append([(c1, c2), x_tr_t, y_tr_t])
-            self.tasks_va.append([(c1, c2), x_va_t, y_va_t])
-            self.tasks_te.append([(c1, c2), x_te_t, y_te_t])
-
-            if ind_task == 0:
-                full_x_tr = x_tr_t
-                full_x_va = x_va_t
-                full_x_te = x_te_t
-                full_y_tr = y_tr_t
-                full_y_va = y_va_t
-                full_y_te = y_te_t
-            else:
-                full_x_tr = torch.cat([full_x_tr, x_tr_t], dim=0)
-                full_x_va = torch.cat([full_x_va, x_va_t], dim=0)
-                full_x_te = torch.cat([full_x_te, x_te_t], dim=0)
-                full_y_tr = torch.cat([full_y_tr, y_tr_t], dim=0)
-                full_y_va = torch.cat([full_y_va, y_va_t], dim=0)
-                full_y_te = torch.cat([full_y_te, y_te_t], dim=0)
+            c1, c2, x_t, y_t = self.create_task(ind_task, x_, y_)
+            self.continuum.append([(c1, c2), x_t, y_t])
 
         if not self.path_only:
-            print(self.tasks_tr[0][1].shape)
-            print(self.tasks_tr[0][1].mean())
-            print(self.tasks_tr[0][1].std())
+            print(self.continuum[0][1].shape)
+            print(self.continuum[0][1].mean())
+            print(self.continuum[0][1].std())
 
-        torch.save(self.tasks_tr, self.o_train)
-        torch.save(self.tasks_va, self.o_valid)
-        torch.save(self.tasks_te, self.o_test)
-
-        tasks_tr_full.append([(0, self.num_classes), full_x_tr, full_y_tr])
-        tasks_va_full.append([(0, self.num_classes), full_x_va, full_y_va])
-        tasks_te_full.append([(0, self.num_classes), full_x_te, full_y_te])
-
-        torch.save(tasks_tr_full, self.o_train_full)
-        torch.save(tasks_va_full, self.o_valid_full)
-        torch.save(tasks_te_full, self.o_test_full)
+        torch.save(self.continuum, self.out_file)

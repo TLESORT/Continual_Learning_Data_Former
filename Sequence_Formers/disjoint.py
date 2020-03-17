@@ -12,7 +12,7 @@ class Disjoint(Sequence_Former):
      want to split a dataset and therefor in autorize to choose the number of classes per tasks.
     This scenario test algorithms when there is no intersection between tasks."""
 
-    def __init__(self, path="./Data", dataset="MNIST", tasks_number=1, train=True):
+    def __init__(self, path="./Data", dataset="MNIST", tasks_number=1, download=False, train=True):
         super(Disjoint, self).__init__(path=path,
                                        dataset=dataset,
                                        tasks_number=tasks_number,
@@ -21,7 +21,7 @@ class Disjoint(Sequence_Former):
                                        num_classes=10)
 
     def select_index(self, ind_task, y):
-        cpt = int(self.num_classes / self.n_tasks)
+        cpt = int(self.num_classes / self.tasks_number)
 
         if not cpt > 0:
             raise AssertionError("Cpt can't be equal to zero for selection of classes")

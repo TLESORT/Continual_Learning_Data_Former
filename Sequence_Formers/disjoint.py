@@ -1,4 +1,3 @@
-
 import os
 
 if os.path.exists("Sequence_Formers"):
@@ -31,4 +30,3 @@ class Disjoint(Sequence_Former):
         class_max = (ind_task + 1) * cpt
 
         return class_min, class_max, ((y >= class_min) & (y < class_max)).nonzero().view(-1)
-

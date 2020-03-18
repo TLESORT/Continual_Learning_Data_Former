@@ -54,15 +54,15 @@ def check_args(args):
     return args
 
 
-def check_and_Download_data(folder, dataset, task):
+def check_and_Download_data(folder, dataset, scenario, download=False):
     # download data if possible
-    if dataset == 'MNIST' or dataset == 'mnishion' or "mnist_fellowship" in task:
-        datasets.MNIST(os.path.join(folder, "MNIST"), train=True, download=True, transform=transforms.ToTensor())
-    if dataset == 'fashion' or dataset == 'mnishion' or "mnist_fellowship" in task:
-        Fashion(os.path.join(folder, "fashion"), train=True, download=True, transform=transforms.ToTensor())
+    if dataset == 'MNIST' or dataset == 'mnishion' or "mnist_fellowship" in scenario:
+        datasets.MNIST(folder, train=True, download=download, transform=transforms.ToTensor())
+    if dataset == 'fashion' or dataset == 'mnishion' or "mnist_fellowship" in scenario:
+        Fashion(os.path.join(folder, "fashion"), train=True, download=download, transform=transforms.ToTensor())
     # download data if possible
-    if dataset == 'kmnist' or "mnist_fellowship" in task:
-        Kmnist(os.path.join(folder, "kmnist"), train=True, download=True, transform=transforms.ToTensor())
+    if dataset == 'kmnist' or "mnist_fellowship" in scenario:
+        Kmnist(os.path.join(folder, "kmnist"), train=True, download=download, transform=transforms.ToTensor())
     if dataset == 'core50' or dataset == 'core10':
         if not os.path.isdir(folder):
             print('This dataset should be downloaded manually')
@@ -70,21 +70,21 @@ def check_and_Download_data(folder, dataset, task):
 def load_data(dataset, path2data, train=True):
     if dataset == 'cifar10':
         path2data = os.path.join(path2data, dataset, "processed")
-        x_, y_ = load_Cifar10(path2data, train)
+        x_, y_ = load_Cifar10(path2data, train, download)
 
         x_ = x_.float()
     elif dataset == 'cifar100':
         path2data = os.path.join(path2data, dataset, "processed")
-        x_, y_ = load_Cifar100(path2data, train)
+        x_, y_ = load_Cifar100(path2data, train, download)
 
         x_ = x_.float()
     elif dataset == 'LSUN':
-        x_, y_ = load_LSUN(path2data, train)
+        x_, y_ = load_LSUN(path2data, train, download)
 
         x_ = x_.float()
     elif dataset == 'core50' or dataset == 'core10':
 
-        x_, y_ = load_core50(dataset, path2data, train)
+        x_, y_ = load_core50(dataset, path2data, train, download)
 
     elif 'mnist_fellowship' in dataset:
         # In this case data will be loaded later dataset by dataset

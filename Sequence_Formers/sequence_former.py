@@ -12,19 +12,19 @@ else:
 class Sequence_Former(ContinuumSetLoader):
     '''Parent Class for Sequence Formers'''
 
-    def __init__(self, path, dataset, tasks_number, scenario, num_classes, train=True, path_only=False, verbose=False):
+    def __init__(self, path, dataset, tasks_number, scenario, num_classes, download=False, train=True, path_only=False, verbose=False):
 
         self.tasks_number = tasks_number
         self.num_classes = num_classes
-        self.i = os.path.join(path, "Datasets")
-        self.o = os.path.join(path, "Continua")
         self.dataset = dataset
+        self.i = os.path.join(path, "Datasets")
+        self.o = os.path.join(path, "Continua", self.dataset)
         self.train = train
         self.imageSize, self.img_channels = get_images_format(self.dataset)
-        #self.path_only = args.path_only  # only valid for core50 at the moment
         self.scenario = scenario
         self.verbose = verbose
         self.path_only = path_only
+        self.download = True
 
         # if self.path_only we don't load data but just path
         # data will be loaded online while learning
@@ -42,13 +42,16 @@ class Sequence_Former(ContinuumSetLoader):
         else:
             self.out_file = os.path.join(self.o, '{}_{}_test{}.pt'.format(self.scenario, self.tasks_number, light_id))
 
-        check_and_Download_data(self.i, self.dataset, task=self.scenario)
-        self.formating_data()
+        check_and_Download_data(self.i, self.dataset, scenario=self.scenario, download=self.download)
 
+        if self.download or not os.path.isfile(self.out_file):
+            print("NON !!!!!!!!!")
+            self.formating_data()
+        else:
+            print("OUI !!!!!!!!!")
+            self.continuum = torch.load(self.out_file)
 
         super(Sequence_Former, self).__init__(self.continuum)
-
-
 
     def select_index(self, ind_task, y):
         """

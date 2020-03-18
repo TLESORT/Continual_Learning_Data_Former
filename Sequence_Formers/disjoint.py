@@ -17,6 +17,7 @@ class Disjoint(Sequence_Former):
                                        dataset=dataset,
                                        tasks_number=tasks_number,
                                        scenario="Disjoint",
+                                       download=download,
                                        train=train,
                                        num_classes=10)
 

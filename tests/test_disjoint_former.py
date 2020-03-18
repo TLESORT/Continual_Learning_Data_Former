@@ -5,7 +5,7 @@ from Sequence_Formers.disjoint_rotations import DisjointRotations
 import os
 
 dataset_size = 100
-dir_archive = "./Archives"
+dir_data = "."
 
 
 class args(object):
@@ -26,7 +26,7 @@ class args(object):
             raise AssertionError("Dir is None")
         if self.dataset is None:
             raise AssertionError("dataset is None")
-        self.o = os.path.join(self.dir, 'Data', 'Tasks', self.dataset)
+        self.o = os.path.join(self.dir, 'Data', 'Continua', self.dataset)
         self.i = os.path.join(self.dir, 'Data', 'Datasets')
 
     def add_supp_parameters(self, method):
@@ -40,27 +40,21 @@ class args(object):
 def get_args():
     return args()
 
-def check_task_sequences_files(task, folder,n_tasks, dataset):
-    filename = "{}_{}_{}.pt".format(task, n_tasks, "train")
+def check_task_sequences_files(scenario, folder,n_tasks, dataset, train=True):
 
-    path = os.path.join(folder, "Data", "Tasks", dataset, filename)
-    if not os.path.isfile(path):
-        raise AssertionError("Test fail with train file : {}".format(path))
+    if train:
+        filename = "{}_{}_{}.pt".format(scenario, n_tasks, "train")
+    else:
+        filename = "{}_{}_{}.pt".format(scenario, n_tasks, "test")
 
-    filename = "{}_{}_{}.pt".format(task, n_tasks, "valid")
-    path = os.path.join(folder, "Data", "Tasks", dataset, filename)
+    path = os.path.join(folder, "Data", "Continua", dataset, filename)
     if not os.path.isfile(path):
-        raise AssertionError("Test fail with valid file : {}".format(path))
-
-    filename = "{}_{}_{}.pt".format(task, n_tasks, "test")
-    path = os.path.join(folder, "Data", "Tasks", dataset, filename)
-    if not os.path.isfile(path):
-        raise AssertionError("Test fail with test file : {}".format(path))
+        raise AssertionError("Test fail with file : {}".format(path))
 
 
 
 #@pytest.mark.parametrize("datasets", ["mnist", "fashion", "kmnist","cifar10","LSUN","core50"])
-@pytest.mark.skip(reason="Too memory angry")
+@pytest.mark.skip(reason="Too memory hungry")
 @pytest.mark.parametrize("dataset", ["MNIST", "fashion", "kmnist", "cifar10"])
 def test_download(tmpdir, get_args, dataset):
     args = get_args
@@ -75,23 +69,26 @@ def test_download(tmpdir, get_args, dataset):
 
 # #@pytest.mark.parametrize("datasets", ["mnist", "fashion", "kmnist","cifar10","LSUN","core50"])
 @pytest.mark.slow
-@pytest.mark.parametrize("dataset", ["MNIST", "fashion", "kmnist", "cifar10"])
+@pytest.mark.parametrize("dataset", ["MNIST", "fashion", "kmnist"])
 @pytest.mark.parametrize("n_tasks", [1, 5, 10])
-def test_disjoint_vanilla(tmpdir, get_args, dataset, n_tasks):
-    args = get_args
-    args.dir = tmpdir
-    args.dataset = dataset
-    args.n_tasks = n_tasks
-    args.set_paths()
+def test_disjoint_vanilla_train(dataset, n_tasks):
     # no need to download the dataset again for this test (if it already exists)
-    args.i = os.path.join(dir_archive, 'Data', 'Datasets')
-    Data_Former = Disjoint(args)
-    Data_Former.formating_data()
+    input_folder = os.path.join(dir_data, 'Data')
+    Data_Former = Disjoint(path=input_folder, dataset=dataset, tasks_number=n_tasks, download=False, train=True)
+    check_task_sequences_files(scenario="Disjoint", folder=dir_data, n_tasks=n_tasks, dataset=dataset, train=True)
 
-    check_task_sequences_files(args.task, tmpdir, n_tasks, dataset)
+@pytest.mark.slow
+@pytest.mark.parametrize("dataset", ["MNIST", "fashion", "kmnist"])
+@pytest.mark.parametrize("n_tasks", [1, 5, 10])
+def test_disjoint_vanilla_test(dataset, n_tasks):
+    # no need to download the dataset again for this test (if it already exists)
+    input_folder = os.path.join(dir_data, 'Data')
+    Data_Former = Disjoint(path=input_folder, dataset=dataset, tasks_number=n_tasks, download=False, train=False)
+    check_task_sequences_files(scenario="Disjoint", folder=dir_data, n_tasks=n_tasks, dataset=dataset, train=False)
 
 
 # #@pytest.mark.parametrize("datasets", ["mnist", "fashion", "kmnist","cifar10","LSUN","core50"])
+@pytest.mark.skip(reason="not yet implemented")
 @pytest.mark.slow
 @pytest.mark.parametrize("dataset", ["MNIST"])
 @pytest.mark.parametrize("n_tasks", [30])
@@ -106,24 +103,6 @@ def test_disjoint_rotations(tmpdir, get_args, dataset, n_tasks):
     # no need to download the dataset again for this test (if it already exists)
     args.i = os.path.join(dir_archive, 'Data', 'Datasets')
     Data_Former = DisjointRotations(args)
-    Data_Former.formating_data()
-
-    check_task_sequences_files(args.task, tmpdir, n_tasks, dataset)
-
-@pytest.mark.slow
-@pytest.mark.parametrize("dataset", ["MNIST"])
-@pytest.mark.parametrize("n_tasks", [3])
-def test_rotations(tmpdir, get_args, dataset, n_tasks):
-    args = get_args
-    args.add_supp_parameters("rotations")
-    args.dir = tmpdir
-    args.dataset = dataset
-    args.n_tasks = n_tasks
-    args.task = "rotations"
-    args.set_paths()
-    # no need to download the dataset again for this test (if it already exists)
-    args.i = os.path.join(dir_archive, 'Data', 'Datasets')
-    Data_Former = Rotations(args)
     Data_Former.formating_data()
 
     check_task_sequences_files(args.task, tmpdir, n_tasks, dataset)

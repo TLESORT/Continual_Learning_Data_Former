@@ -8,11 +8,18 @@ class Rotations(Sequence_Former):
     The goal is to test algorithms where all data for each classes are not available simultaneously and there is a concept
      drift.'''
 
-    def __init__(self, args):
-        super(Rotations, self).__init__(args)
+    def __init__(self, path="./Data", dataset="MNIST", tasks_number=1, download=False, train=True, min_rot=0.0,
+                 max_rot=90.0):
+        self.max_rot = max_rot
+        self.min_rot = min_rot
 
-        self.max_rot = args.max_rot
-        self.min_rot = args.min_rot
+        super(Rotations, self).__init__(path=path,
+                                        dataset=dataset,
+                                        tasks_number=tasks_number,
+                                        scenario="Rotations",
+                                        download=download,
+                                        train=train,
+                                        num_classes=10)
 
     def apply_rotation(self, data, min_rot, max_rot):
         transform = transforms.Compose(
@@ -28,7 +35,7 @@ class Rotations(Sequence_Former):
         return result
 
     def transformation(self, ind_task, data):
-        delta_rot = 1.0 * (self.max_rot - self.min_rot) / self.n_tasks
+        delta_rot = 1.0 * (self.max_rot - self.min_rot) / self.tasks_number
         noise = 1.0 * delta_rot / 10.0
 
         min_rot = self.min_rot + (delta_rot * ind_task) - noise

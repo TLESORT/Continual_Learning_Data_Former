@@ -1,12 +1,7 @@
-import os
-
-if os.path.exists("Sequence_Formers"):
-    from Sequence_Formers.sequence_former import Sequence_Former
-else:
-    from ..Sequence_Formers.sequence_former import Sequence_Former
+from builders.continuumbuilder import ContinuumBuilder
 
 
-class Disjoint(Sequence_Former):
+class Disjoint(ContinuumBuilder):
     """Scenario : each new classes gives never seen new classes to learn. The code here allows to choose in how many task we
      want to split a dataset and therefor in autorize to choose the number of classes per tasks.
     This scenario test algorithms when there is no intersection between tasks."""

@@ -1,7 +1,6 @@
 import pytest
 from tests.utils_tests import check_task_sequences_files
-from Sequence_Formers.rotations import Rotations
-from Sequence_Formers.disjoint_rotations import DisjointRotations
+from builders.rotations import Rotations
 import os
 
 dataset_size = 100
@@ -17,7 +16,7 @@ dir_data = "./Archives"
 def test_rotations_train(dataset, n_tasks, rotation_min, rotation_max):
     # no need to download the dataset again for this test (if it already exists)
     input_folder = os.path.join(dir_data, 'Data')
-    Data_Former = Rotations(path=input_folder, dataset=dataset, tasks_number=n_tasks, download=False, train=True,
-                            min_rot=rotation_min,
-                            max_rot=rotation_max)
+    Rotations(path=input_folder, dataset=dataset, tasks_number=n_tasks, download=False, train=True,
+              min_rot=rotation_min,
+              max_rot=rotation_max)
     check_task_sequences_files(scenario="Rotations", folder=dir_data, n_tasks=n_tasks, dataset=dataset, train=True)

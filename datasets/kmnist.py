@@ -1,10 +1,10 @@
 from __future__ import print_function
 import os
 
-if os.path.exists("dataset_loaders"):
-    from dataset_loaders.fashion import Fashion
+if os.path.exists("datasets"):
+    from datasets.fashion import Fashion
 else:
-    from ..dataset_loaders.fashion import Fashion
+    from ..datasets.fashion import Fashion
 
 
 

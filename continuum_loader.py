@@ -6,7 +6,7 @@ import torchvision.transforms.functional as TF
 from PIL import Image
 import os
 
-if os.path.exists("Sequence_Formers"):
+if os.path.exists("builders"):
     from data_utils import make_samples_batche, save_images
 else:
     from .data_utils import make_samples_batche, save_images

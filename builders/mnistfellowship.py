@@ -1,26 +1,29 @@
 import torch
 import os
 
-if os.path.exists("Sequence_Formers"):
+if os.path.exists("builders"):
     from data_utils import load_data
-    from Sequence_Formers.sequence_former import Sequence_Former
+    from builders.continuumbuilder import ContinuumBuilder
 else:
     from ..data_utils import load_data
 
 
-class MnistFellowship(Sequence_Former):
-    def __init__(self, path="./Data", merge=False, download=False, train=True):
+class MnistFellowship(ContinuumBuilder):
+    def __init__(self, path="./Archives/Data", tasks_number=3, merge=False, download=False, train=True):
 
         self.merge = merge
+        if self.merge:
+            self.scenario = "mnist_fellowship_merge"
+        else:
+            self.scenario = "mnist_fellowship"
+
         super(MnistFellowship, self).__init__(path=path,
-                                       dataset="mnist_fellowship",
-                                       tasks_number=3,
-                                       scenario="mnist_fellowship",
-                                       download=download,
-                                       train=train,
-                                       num_classes=10)
-
-
+                                              dataset="mnist_fellowship",
+                                              tasks_number=tasks_number,
+                                              scenario=self.scenario,
+                                              download=download,
+                                              train=train,
+                                              num_classes=10)
 
     def select_index(self, ind_task, y):
 
@@ -59,4 +62,3 @@ class MnistFellowship(Sequence_Former):
         x_, y_ = load_data(self.dataset, self.i)
 
         return super().create_task(ind_task, x_, y_)
-

@@ -1,9 +1,9 @@
 from torchvision import transforms
 import torch
-from Sequence_Formers.sequence_former import Sequence_Former
+from builders.continuumbuilder import ContinuumBuilder
 
 
-class Rotations(Sequence_Former):
+class Rotations(ContinuumBuilder):
     '''Scenario : In this scenario, for each tasks all classes are available, however for each task data rotate a bit.
     The goal is to test algorithms where all data for each classes are not available simultaneously and there is a concept
      drift.'''

@@ -3,13 +3,13 @@ import torch
 from copy import deepcopy
 from continuum_loader import ContinuumSetLoader
 
-if os.path.exists("Sequence_Formers"):  # check if we are in the folder Continual_Learning_Data_Former
+if os.path.exists("builders"):  # check if we are in the folder Continual_Learning_Data_Former
     from data_utils import load_data, check_and_Download_data, get_images_format
 else:
     from ..data_utils import load_data, check_and_Download_data, get_images_format
 
 
-class Sequence_Former(ContinuumSetLoader):
+class ContinuumBuilder(ContinuumSetLoader):
     '''Parent Class for Sequence Formers'''
 
     def __init__(self, path, dataset, tasks_number, scenario, num_classes, download=False, train=True, path_only=False, verbose=False):
@@ -24,7 +24,7 @@ class Sequence_Former(ContinuumSetLoader):
         self.scenario = scenario
         self.verbose = verbose
         self.path_only = path_only
-        self.download = True
+        self.download = download
 
         # if self.path_only we don't load data but just path
         # data will be loaded online while learning
@@ -42,14 +42,16 @@ class Sequence_Former(ContinuumSetLoader):
         else:
             self.out_file = os.path.join(self.o, '{}_{}_test{}.pt'.format(self.scenario, self.tasks_number, light_id))
 
-        check_and_Download_data(self.i, self.dataset, scenario=self.scenario, download=self.download)
+        check_and_Download_data(self.i, self.dataset, scenario=self.scenario)
 
         if self.download or not os.path.isfile(self.out_file):
             self.formating_data()
         else:
+            print("avant")
             self.continuum = torch.load(self.out_file)
+            print("apres")
 
-        super(Sequence_Former, self).__init__(self.continuum)
+        super(ContinuumBuilder, self).__init__(self.continuum)
 
     def select_index(self, ind_task, y):
         """
@@ -99,10 +101,12 @@ class Sequence_Former(ContinuumSetLoader):
     def create_task(self, ind_task, x_, y_):
 
         # select only the good classes
-        class_min, class_max, i_tr = self.select_index(ind_task, y_)
+        class_min, class_max, id_ = self.select_index(ind_task, y_)
 
-        x_t = self.transformation(ind_task, x_)
-        y_t = self.label_transformation(ind_task, y_)
+        x_select = x_[id_]
+        y_select = y_[id_]
+        x_t = self.transformation(ind_task, x_select)
+        y_t = self.label_transformation(ind_task, y_select)
 
         if self.verbose and self.path_only:
             print("Task : {}".format(ind_task))
@@ -126,6 +130,8 @@ class Sequence_Former(ContinuumSetLoader):
         for ind_task in range(self.tasks_number):
 
             c1, c2, x_t, y_t = self.create_task(ind_task, x_, y_)
+
+            print("task {} shape: {}".format(ind_task, y_t.shape))
             self.continuum.append([(c1, c2), x_t, y_t])
 
         if not self.path_only:

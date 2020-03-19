@@ -10,20 +10,20 @@ from torchvision import datasets, transforms
 import numpy as np
 import imageio
 
-if os.path.exists("dataset_loaders"):
-    from dataset_loaders.LSUN import load_LSUN
-    from dataset_loaders.cifar10 import load_Cifar10
-    from dataset_loaders.cifar100 import load_Cifar100
-    from dataset_loaders.core50 import load_core50
-    from dataset_loaders.fashion import Fashion
-    from dataset_loaders.kmnist import Kmnist
+if os.path.exists("datasets"):
+    from datasets.LSUN import load_LSUN
+    from datasets.cifar10 import load_Cifar10
+    from datasets.cifar100 import load_Cifar100
+    from datasets.core50 import load_core50
+    from datasets.fashion import Fashion
+    from datasets.kmnist import Kmnist
 else:
-    from .dataset_loaders.LSUN import load_LSUN
-    from .dataset_loaders.cifar10 import load_Cifar10
-    from .dataset_loaders.cifar100 import load_Cifar100
-    from .dataset_loaders.core50 import load_core50
-    from .dataset_loaders.fashion import Fashion
-    from .dataset_loaders.kmnist import Kmnist
+    from .datasets.LSUN import load_LSUN
+    from .datasets.cifar10 import load_Cifar10
+    from .datasets.cifar100 import load_Cifar100
+    from .datasets.core50 import load_core50
+    from .datasets.fashion import Fashion
+    from .datasets.kmnist import Kmnist
 
 def get_images_format(dataset):
 
@@ -54,15 +54,15 @@ def check_args(args):
     return args
 
 
-def check_and_Download_data(folder, dataset, scenario, download=False):
+def check_and_Download_data(folder, dataset, scenario):
     # download data if possible
     if dataset == 'MNIST' or dataset == 'mnishion' or "mnist_fellowship" in scenario:
-        datasets.MNIST(folder, train=True, download=download, transform=transforms.ToTensor())
+        datasets.MNIST(folder, train=True, download=True, transform=transforms.ToTensor())
     if dataset == 'fashion' or dataset == 'mnishion' or "mnist_fellowship" in scenario:
-        Fashion(os.path.join(folder, "fashion"), train=True, download=download, transform=transforms.ToTensor())
+        Fashion(os.path.join(folder, "fashion"), train=True, download=True, transform=transforms.ToTensor())
     # download data if possible
     if dataset == 'kmnist' or "mnist_fellowship" in scenario:
-        Kmnist(os.path.join(folder, "kmnist"), train=True, download=download, transform=transforms.ToTensor())
+        Kmnist(os.path.join(folder, "kmnist"), train=True, download=True, transform=transforms.ToTensor())
     if dataset == 'core50' or dataset == 'core10':
         if not os.path.isdir(folder):
             print('This dataset should be downloaded manually')

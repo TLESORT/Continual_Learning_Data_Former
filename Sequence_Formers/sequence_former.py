@@ -101,28 +101,13 @@ class Sequence_Former(ContinuumSetLoader):
         # select only the good classes
         class_min, class_max, i_tr = self.select_index(ind_task, y_)
 
-        #_, _, i_te = self.select_index(ind_task, y_te)
-        #i_tr, i_va = self.get_valid_ind(i_tr)
-
         x_t = self.transformation(ind_task, x_)
-        #x_tr_t = self.transformation(ind_task, x_tr[i_tr])
-        #x_va_t = self.transformation(ind_task, x_tr[i_va])
-        #x_te_t = self.transformation(ind_task, x_te[i_te])
-
         y_t = self.label_transformation(ind_task, y_)
-        #y_tr_t = self.label_transformation(ind_task, y_tr[i_tr])
-        #y_va_t = self.label_transformation(ind_task, y_tr[i_va])
-        #y_te_t = self.label_transformation(ind_task, y_te[i_te])
 
         if self.verbose and self.path_only:
             print("Task : {}".format(ind_task))
             ind = torch.randperm(len(x_t))[:10]
-            #ind = torch.randperm(len(x_tr_t))[:10]
-            #print(x_tr_t[ind])
-            #ind = torch.randperm(len(x_va_t))[:10]
-            #print(x_va_t[ind])
-            #ind = torch.randperm(len(x_te_t))[:10]
-            #print(x_te_t[ind])
+            print(x_t[ind])
 
         return class_min, class_max, x_t, y_t
 

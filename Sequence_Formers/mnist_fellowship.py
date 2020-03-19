@@ -9,26 +9,22 @@ else:
 
 
 class MnistFellowship(Sequence_Former):
-    def __init__(self, args):
-        super(MnistFellowship, self).__init__(args)
+    def __init__(self, path="./Data", merge=False, download=False, train=True):
 
-        if args.task == "mnist_fellowship_merge":
-            # all classes 0 stay class 0
-            self.disjoint_classes = False
-            if not self.num_classes == 10:
-                raise AssertionError("Wrong number of classes for this experiment")
-        else:
-            # all classes 0 will be splat into 0, 10, 20
-            self.disjoint_classes = True
-            if not self.num_classes == 30:
-                raise AssertionError("Wrong number of classes for this experiment")
-
+        self.merge = merge
+        super(MnistFellowship, self).__init__(path=path,
+                                       dataset="mnist_fellowship",
+                                       tasks_number=3,
+                                       scenario="mnist_fellowship",
+                                       download=download,
+                                       train=train,
+                                       num_classes=10)
 
 
 
     def select_index(self, ind_task, y):
 
-        if self.disjoint_classes:
+        if not self.merge:
             class_min = self.num_classes * ind_task
             class_max = self.num_classes * (ind_task + 1) - 1
         else:
@@ -45,12 +41,12 @@ class MnistFellowship(Sequence_Former):
         """
 
         # if self.disjoint class 0 of second task become class 10, class 1 -> class 11, ...
-        if self.disjoint_classes:
+        if not self.merge:
             label = label + self.num_classes * ind_task
 
         return label
 
-    def create_task(self, ind_task, x_tr, y_tr, x_te, y_te):
+    def create_task(self, ind_task, x_, y_):
 
         if ind_task == 0:  # MNIST
             self.dataset = 'MNIST'
@@ -60,6 +56,7 @@ class MnistFellowship(Sequence_Former):
             self.dataset = 'kmnist'
 
         # we load a new dataset for each task
-        x_tr, y_tr, x_te, y_te = load_data(self.dataset, self.i)
+        x_, y_ = load_data(self.dataset, self.i)
 
-        return super().create_task(ind_task, x_tr, y_tr, x_te, y_te)
+        return super().create_task(ind_task, x_, y_)
+

@@ -45,10 +45,8 @@ class Sequence_Former(ContinuumSetLoader):
         check_and_Download_data(self.i, self.dataset, scenario=self.scenario, download=self.download)
 
         if self.download or not os.path.isfile(self.out_file):
-            print("NON !!!!!!!!!")
             self.formating_data()
         else:
-            print("OUI !!!!!!!!!")
             self.continuum = torch.load(self.out_file)
 
         super(Sequence_Former, self).__init__(self.continuum)
@@ -128,7 +126,12 @@ class Sequence_Former(ContinuumSetLoader):
 
         return class_min, class_max, x_t, y_t
 
+    def prepare_formatting(self):
+        pass
+
     def formating_data(self):
+
+        self.prepare_formatting()
 
         # variable to save the sequence
         self.continuum = []

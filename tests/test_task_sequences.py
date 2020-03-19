@@ -11,6 +11,7 @@ dir_samples = "Samples"
 
 # command MNIST : python main.py --task disjoint --n_tasks 10 --dataset MNIST
 # command fashion : python main.py --task disjoint --n_tasks 10 --dataset fashion
+
 @pytest.mark.parametrize("dataset", ["MNIST", "fashion", "kmnist"])
 @pytest.mark.parametrize("ind_task", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 def test_disjoint_samples_train_10_tasks(dataset, ind_task):

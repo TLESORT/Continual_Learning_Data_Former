@@ -10,20 +10,13 @@ from torchvision import datasets, transforms
 import numpy as np
 import imageio
 
-if os.path.exists("datasets"):
-    from datasets.LSUN import load_LSUN
-    from datasets.cifar10 import load_Cifar10
-    from datasets.cifar100 import load_Cifar100
-    from datasets.core50 import load_core50
-    from datasets.fashion import Fashion
-    from datasets.kmnist import Kmnist
-else:
-    from .datasets.LSUN import load_LSUN
-    from .datasets.cifar10 import load_Cifar10
-    from .datasets.cifar100 import load_Cifar100
-    from .datasets.core50 import load_core50
-    from .datasets.fashion import Fashion
-    from .datasets.kmnist import Kmnist
+from .datasets.LSUN import load_LSUN
+from .datasets.cifar10 import load_Cifar10
+from .datasets.cifar100 import load_Cifar100
+from .datasets.core50 import load_core50
+from .datasets.fashion import Fashion
+from .datasets.kmnist import Kmnist
+
 
 def get_images_format(dataset):
 
@@ -70,21 +63,21 @@ def check_and_Download_data(folder, dataset, scenario):
 def load_data(dataset, path2data, train=True):
     if dataset == 'cifar10':
         path2data = os.path.join(path2data, dataset, "processed")
-        x_, y_ = load_Cifar10(path2data, train, download)
+        x_, y_ = load_Cifar10(path2data, train)
 
         x_ = x_.float()
     elif dataset == 'cifar100':
         path2data = os.path.join(path2data, dataset, "processed")
-        x_, y_ = load_Cifar100(path2data, train, download)
+        x_, y_ = load_Cifar100(path2data, train)
 
         x_ = x_.float()
     elif dataset == 'LSUN':
-        x_, y_ = load_LSUN(path2data, train, download)
+        x_, y_ = load_LSUN(path2data, train)
 
         x_ = x_.float()
     elif dataset == 'core50' or dataset == 'core10':
 
-        x_, y_ = load_core50(dataset, path2data, train, download)
+        x_, y_ = load_core50(dataset, path2data, train)
 
     elif 'mnist_fellowship' in dataset:
         # In this case data will be loaded later dataset by dataset

@@ -225,10 +225,7 @@ class ContinuumSetLoader(data.Dataset):
         return self.current_task
 
     def save(self, path, force=False):
-        if force:
-            torch.save(self.dataset, path)
-        else:
-            print("WE DO NOT SAVE ANYMORE")
+        torch.save(self.dataset, path)
 
     def visualize_sample(self, path, number, shape, class_=None):
 

@@ -1,10 +1,16 @@
 
 
 
-from Sequence_Formers.disjoint import Disjoint
+from builders.disjoint import Disjoint
+from builders.mnistfellowship import MnistFellowship
 from torch.utils import data
 
-continuum = Disjoint(dataset="MNIST", tasks_number=3)
+
+dir_data = "Archives/Data"
+dataset= "MNIST"
+#continuum = Disjoint(path=dir_data, dataset=dataset, tasks_number=10, download=True, train=True)
+continuum = MnistFellowship(path=dir_data, tasks_number=3, download=False, train=True)
+
 
 train_loader = data.DataLoader(continuum, batch_size=64, shuffle=True, num_workers=6)
 

@@ -1,4 +1,3 @@
-
 import torch
 import pytest
 import os
@@ -8,6 +7,7 @@ from builders.mnistfellowship import MnistFellowship
 
 dir_data = "Archives"
 dir_samples = "Samples"
+
 
 # command MNIST : python main.py --task disjoint --n_tasks 10 --dataset MNIST
 # command fashion : python main.py --task disjoint --n_tasks 10 --dataset fashion
@@ -32,10 +32,10 @@ def test_disjoint_samples_train_10_tasks(dataset, ind_task):
     path_out = os.path.join(folder, "{}_task_{}.png".format(dataset, ind_task))
     data_set.visualize_sample(path_out, number=100, shape=[28, 28, 1])
 
+
 @pytest.mark.parametrize("dataset", ["MNIST"])
 @pytest.mark.parametrize("ind_task", [0, 1, 2, 3, 4])
 def test_disjoint_samples_train_5_tasks(dataset, ind_task):
-
     input_folder = os.path.join(dir_data, 'Data')
     data_set = Disjoint(path=input_folder, dataset=dataset, tasks_number=5, download=False, train=True)
 
@@ -73,4 +73,3 @@ def test_samples_mnist_fellowship(ind_task):
     path_out = os.path.join(folder, "mnist_fellowship_task_{}.png".format(ind_task))
 
     data_set.visualize_sample(path_out, number=100, shape=[28, 28, 1])
-

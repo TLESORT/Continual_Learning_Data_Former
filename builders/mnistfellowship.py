@@ -1,11 +1,9 @@
 import torch
 import os
 
-if os.path.exists("builders"):
-    from data_utils import load_data
-    from builders.continuumbuilder import ContinuumBuilder
-else:
-    from ..data_utils import load_data
+from .data_utils import load_data
+from .continuumbuilder import ContinuumBuilder
+
 
 
 class MnistFellowship(ContinuumBuilder):

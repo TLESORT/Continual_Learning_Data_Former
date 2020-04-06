@@ -1,12 +1,8 @@
 import os.path
 import torch
 from copy import deepcopy
-from continuum_loader import ContinuumSetLoader
-
-if os.path.exists("builders"):  # check if we are in the folder Continual_Learning_Data_Former
-    from data_utils import load_data, check_and_Download_data, get_images_format
-else:
-    from ..data_utils import load_data, check_and_Download_data, get_images_format
+from .continuum_loader import ContinuumSetLoader
+from .data_utils import load_data, check_and_Download_data, get_images_format
 
 
 class ContinuumBuilder(ContinuumSetLoader):
@@ -47,9 +43,7 @@ class ContinuumBuilder(ContinuumSetLoader):
         if self.download or not os.path.isfile(self.out_file):
             self.formating_data()
         else:
-            print("avant")
             self.continuum = torch.load(self.out_file)
-            print("apres")
 
         super(ContinuumBuilder, self).__init__(self.continuum)
 
@@ -130,11 +124,9 @@ class ContinuumBuilder(ContinuumSetLoader):
         for ind_task in range(self.tasks_number):
 
             c1, c2, x_t, y_t = self.create_task(ind_task, x_, y_)
-
-            print("task {} shape: {}".format(ind_task, y_t.shape))
             self.continuum.append([(c1, c2), x_t, y_t])
 
-        if not self.path_only:
+        if self.verbose and not self.path_only:
             print(self.continuum[0][1].shape)
             print(self.continuum[0][1].mean())
             print(self.continuum[0][1].std())

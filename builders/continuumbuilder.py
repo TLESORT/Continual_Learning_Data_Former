@@ -64,7 +64,7 @@ class ContinuumBuilder(ContinuumSetLoader):
         :return: data post processing
         """
         if not ind_task < self.tasks_number:
-            raise AssertionError("Error in task indice")
+            raise AssertionError("Error in task index")
         return deepcopy(data)
 
     def label_transformation(self, ind_task, label):

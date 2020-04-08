@@ -4,14 +4,6 @@
 [![DOI](https://zenodo.org/badge/198824802.svg)](https://zenodo.org/badge/latestdoi/198824802)
 
 
-### Objectif of use
-
-from Continuum.disjoint import Disjoint
-
-continuum = Disjoint(dataset="MNIST", task_number=3)
-
-
-
 ### Intro
 
 This repositery proprose several script to create sequence of tasks for continual learning. The spirit is the following : 
@@ -19,6 +11,46 @@ Instead of managing the sequence of tasks while learning, we create the sequence
 one by one while learning.
 
 It makes programming easier and code cleaner.
+
+### Installation
+
+```bash
+git clone https://github.com/TLESORT/Continual_Learning_Data_Former
+cd Continual_Learning_Data_Former
+git checkout Continuum
+pip install .
+```
+
+### Use
+
+```python
+from builders.disjoint import Disjoint
+from torch.utils import data
+
+# create continuum dataset
+continuum = Disjoint(path=".", dataset="MNIST", task_number=3, download=True,
+                         train=True)
+
+# create pytorch dataloader
+train_loader = data.DataLoader(data_set, batch_size=64, shuffle=True, num_workers=6)
+
+#set the task on 0 for example with the data_set
+continuum.set_task(0)
+
+# iterate on task 0
+for t, (data, target) in enumerate(train_loader):
+    print(target)
+    
+#change the task to 2 for example
+continuum.set_task(2)
+
+# iterate on task 2
+for t, (data, target) in enumerate(train_loader):
+    print(target)
+
+
+```
+
 
 ### Task sequences possibilities
 
@@ -80,30 +112,22 @@ python main.py --dataset MNIST --task dijsoint_classes_permutations --n_tasks 10
 
 ### Example of use
 
-First we create the sequence of tasks and save it
-```bash
-#MNIST with 10 tasks of one class
-python main.py --dataset MNIST --task disjoint --n_tasks 10 --dir ./Archives
-```
 
-Then we can use the saved sequence in another program for continual learning
 ```python
 #MNIST with 10 tasks of one class
-from data_loader import DatasetLoader
 import os
 import torch
+
+from builders.disjoint import Disjoint
 from torch.utils import data
 
-# Path to the task sequence
-path = "./Archives/Data/Tasks/MNIST/disjoint_10_train.pt"
-# load the file
-Data = torch.load(path)
-# create a dataset loader
-data_set = DatasetLoader(Data, current_task=0, transform=None, load_images=False, path=None)
+# create continuum dataset
+continuum = Disjoint(path=".", dataset="MNIST", task_number=3, download=True,
+                         train=True)
 
 # We can visualize samples from the sequence of tasks
 for i in range(10):
-    data_set.set_task(i)
+    continuum.set_task(i)
     
     folder = "./Samples/disjoint_10_tasks/"
     
@@ -111,22 +135,22 @@ for i in range(10):
         os.makedirs(folder)
     
     path_samples = os.path.join(folder, "MNIST_task_{}.png".format(i))
-    data_set.visualize_sample(path_samples , number=100, shape=[28,28,1])
+    continuum.visualize_sample(path_samples , number=100, shape=[28,28,1])
     
 # use the dataset with pytorch dataloader for training an algo
 
 # create pytorch dataloader
-train_loader = data.DataLoader(data_set, batch_size=64, shuffle=True, num_workers=6)
+train_loader = data.DataLoader(continuum, batch_size=64, shuffle=True, num_workers=6)
 
-#set the task on 0 for example with the data_set
-data_set.set_task(0)
+#set the task on 0 for example with the continuum
+continuum.set_task(0)
 
 # iterate on task 0
 for t, (data, target) in enumerate(train_loader):
     print(target)
     
 #change the task to 2 for example
-data_set.set_task(2)
+continuum.set_task(2)
 
 # iterate on task 2
 for t, (data, target) in enumerate(train_loader):

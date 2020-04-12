@@ -1,6 +1,6 @@
 import pytest
 from tests.utils_tests import check_task_sequences_files
-from Continuum_Builders.permutations import Permutations
+from continuum.permutations import Permutations
 import os
 
 dataset_size = 100

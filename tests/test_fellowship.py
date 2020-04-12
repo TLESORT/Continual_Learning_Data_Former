@@ -1,6 +1,6 @@
 import pytest
 from tests.utils_tests import check_task_sequences_files
-from builders.mnistfellowship import MnistFellowship
+from continuum.mnistfellowship import MnistFellowship
 import os
 
 dataset_size = 100

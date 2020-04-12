@@ -2,8 +2,8 @@ import torch
 import pytest
 import os
 
-from builders.disjoint import Disjoint
-from builders.mnistfellowship import MnistFellowship
+from continuum.disjoint import Disjoint
+from continuum.mnistfellowship import MnistFellowship
 
 dir_data = "Archives"
 dir_samples = "Samples"

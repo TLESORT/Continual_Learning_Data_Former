@@ -1,6 +1,6 @@
 import pytest
 from tests.utils_tests import check_task_sequences_files
-from builders.rotations import Rotations
+from continuum.rotations import Rotations
 import os
 
 dataset_size = 100

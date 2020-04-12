@@ -1,6 +1,6 @@
 import pytest
 from tests.utils_tests import check_task_sequences_files
-from builders.disjoint import Disjoint
+from continuum.disjoint import Disjoint
 import os
 
 dataset_size = 100

@@ -28,7 +28,7 @@ from continuum.disjoint import Disjoint
 from torch.utils import data
 
 # create continuum dataset
-continuum = Disjoint(path=".", dataset="MNIST", task_number=3, download=True, train=True)
+continuum = Disjoint(path=".", dataset="MNIST", task_number=10, download=True, train=True)
 
 # create pytorch dataloader
 train_loader = data.DataLoader(data_set, batch_size=64, shuffle=True, num_workers=6)
@@ -47,7 +47,18 @@ continuum.set_task(2)
 for t, (data, target) in enumerate(train_loader):
     print(target)
 
-
+# We can visualize samples from the sequence of tasks
+for i in range(10):
+    continuum.set_task(i)
+    
+    folder = "./Samples/disjoint_10_tasks/"
+    
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+    
+    path_samples = os.path.join(folder, "MNIST_task_{}.png".format(i))
+    continuum.visualize_sample(path_samples , number=100, shape=[28,28,1])
+    
 ```
 
 
@@ -102,53 +113,7 @@ continuum = Rotations(path="./Data", dataset="MNIST", tasks_number=5, download=T
 continuum = Permutations(path="./Data", dataset="MNIST", tasks_number=1, download=False, train=True)
 ```
 
-### Example of use
 
-
-```python
-#MNIST with 10 tasks of one class
-import os
-import torch
-
-from continuum.disjoint import Disjoint
-from torch.utils import data
-
-# create continuum dataset
-continuum = Disjoint(path=".", dataset="MNIST", task_number=10, download=True,
-                         train=True)
-
-# We can visualize samples from the sequence of tasks
-for i in range(10):
-    continuum.set_task(i)
-    
-    folder = "./Samples/disjoint_10_tasks/"
-    
-    if not os.path.exists(folder):
-        os.makedirs(folder)
-    
-    path_samples = os.path.join(folder, "MNIST_task_{}.png".format(i))
-    continuum.visualize_sample(path_samples , number=100, shape=[28,28,1])
-    
-# use the dataset with pytorch dataloader for training an algo
-
-# create pytorch dataloader
-train_loader = data.DataLoader(continuum, batch_size=64, shuffle=True, num_workers=6)
-
-#set the task on 0 for example with the continuum
-continuum.set_task(0)
-
-# iterate on task 0
-for t, (data, target) in enumerate(train_loader):
-    print(target)
-    
-#change the task to 2 for example
-continuum.set_task(2)
-
-# iterate on task 2
-for t, (data, target) in enumerate(train_loader):
-    print(target)
-
-```
 
 ### Citing the Project
 

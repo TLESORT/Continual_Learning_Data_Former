@@ -24,12 +24,11 @@ pip install .
 ### Use
 
 ```python
-from builders.disjoint import Disjoint
+from continuum.disjoint import Disjoint
 from torch.utils import data
 
 # create continuum dataset
-continuum = Disjoint(path=".", dataset="MNIST", task_number=3, download=True,
-                         train=True)
+continuum = Disjoint(path=".", dataset="MNIST", task_number=3, download=True, train=True)
 
 # create pytorch dataloader
 train_loader = data.DataLoader(data_set, batch_size=64, shuffle=True, num_workers=6)
@@ -73,7 +72,6 @@ More examples at [Samples](/Samples)
 -   fashion-Mnist
 -   kmnist
 -   cifar10
--   mnishion : concatenation of Mnist and Fashion-Mnist
 -   Core50/Core10
 
 ### Some supplementary option are possible
@@ -81,33 +79,27 @@ More examples at [Samples](/Samples)
 -   Classes order can be shuffled for disjoint tasks
 -   We can choose the magnitude of rotation for rotations mnist
 
-### Few possible commands
+### Few possible invocations
 
 -   Disjoint tasks
 
-```bash
+```python
 #MNIST with 10 tasks of one class
-python main.py --dataset MNIST --task disjoint --n_tasks 10 --dir ./Archives
+continuum = Disjoint(path="./Data", dataset="MNIST", task_number=10, download=True, train=True)
 ```
 -   Rotations tasks
 
-```bash
+```python
 #MNIST with 5 tasks with various rotations
-python main.py --dataset MNIST --task rotations --n_tasks 5 --min_rot 0 --max_rot 90 --dir ./Archives
+continuum = Rotations(path="./Data", dataset="MNIST", tasks_number=5, download=True, train=True, min_rot=0.0,
+                 max_rot=90.0)
 ```
 
 -   Permutations tasks
 
-```bash
+```python
 #MNIST with 10 tasks of one class
-python main.py --dataset MNIST --task permutations --n_tasks 5 --dir ./Archives
-```
-
--   Dijsoint_classes_permutations tasks
-
-```bash
-#MNIST with 10 tasks of one class
-python main.py --dataset MNIST --task dijsoint_classes_permutations --n_tasks 10 --index_permutation 2 --dir ./Archives
+continuum = Permutations(path="./Data", dataset="MNIST", tasks_number=1, download=False, train=True)
 ```
 
 ### Example of use
@@ -118,11 +110,11 @@ python main.py --dataset MNIST --task dijsoint_classes_permutations --n_tasks 10
 import os
 import torch
 
-from builders.disjoint import Disjoint
+from continuum.disjoint import Disjoint
 from torch.utils import data
 
 # create continuum dataset
-continuum = Disjoint(path=".", dataset="MNIST", task_number=3, download=True,
+continuum = Disjoint(path=".", dataset="MNIST", task_number=10, download=True,
                          train=True)
 
 # We can visualize samples from the sequence of tasks

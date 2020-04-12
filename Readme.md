@@ -109,7 +109,7 @@ continuum = Rotations(path="./Data", dataset="MNIST", tasks_number=5, download=T
 -   Permutations tasks
 
 ```python
-#MNIST with 10 tasks of one class
+#MNIST with 5 tasks with different permutations
 continuum = Permutations(path="./Data", dataset="MNIST", tasks_number=1, download=False, train=True)
 ```
 

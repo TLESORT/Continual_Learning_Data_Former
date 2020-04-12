@@ -38,7 +38,7 @@ class Rotations(ContinuumBuilder):
 
         return result
 
-    def transform(self, data, ind_task=None):
+    def transformation(self, ind_task, data):
         if ind_task is None:
             ind_task = self.current_task
 

@@ -5,11 +5,9 @@ from torch.utils import data
 import torchvision.transforms.functional as TF
 from PIL import Image
 import os
+import random
 
-if os.path.exists("builders"):
-    from data_utils import make_samples_batche, save_images
-else:
-    from .data_utils import make_samples_batche, save_images
+from continuum.data_utils import make_samples_batche, save_images
 
 
 class ContinuumSetLoader(data.Dataset):
@@ -54,10 +52,13 @@ class ContinuumSetLoader(data.Dataset):
         self.labels = self.all_labels[self.current_task]
 
         if not load_images:
-            self.shape_img = list(self.dataset[ind_task][1][0].shape)
+            self.shape_img = list(self.dataset[self.current_task][1][0].shape)
 
     def __len__(self):
         return len(self.list_IDs)
+
+    def get_num_tasks(self):
+        return self.n_tasks
 
     def __getitem__(self, index):
         'Generates one sample of data'
@@ -102,12 +103,17 @@ class ContinuumSetLoader(data.Dataset):
         return self
 
     def shuffle_task(self):
-        indices = torch.randperm(len(self.dataset[self.current_task][1]))
-
-        self.dataset[self.current_task][1] = self.dataset[self.current_task][1][indices]
-        self.dataset[self.current_task][2] = self.dataset[self.current_task][2][indices]
-
-        self.reset_labels()
+        random.shuffle(self.list_IDs)
+        # print("OUIIIIIIIIIIIIIIIIIIIIIIi")
+        #
+        # assert len(self.dataset[self.current_task][1]) == len(self.dataset[self.current_task][2])
+        #
+        # indices = torch.randperm(len(self.dataset[self.current_task][1]))
+        #
+        # self.dataset[self.current_task][1] = self.dataset[self.current_task][1][indices]
+        # self.dataset[self.current_task][2] = self.dataset[self.current_task][2][indices]
+        #
+        # self.reset_labels()
         return self
 
     def get_samples_from_ind(self, indices):

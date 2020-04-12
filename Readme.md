@@ -17,7 +17,6 @@ It makes programming easier and code cleaner.
 ```bash
 git clone https://github.com/TLESORT/Continual_Learning_Data_Former
 cd Continual_Learning_Data_Former
-git checkout Continuum
 pip install .
 ```
 

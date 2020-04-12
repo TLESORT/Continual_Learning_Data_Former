@@ -9,7 +9,7 @@ class Permutations(ContinuumBuilder):
     The goal is to test algorithms where all data for each classes are not available simultaneously and are available from
      different mode of th distribution (different permutation modes).'''
 
-    def __init__(self, path="./Data", dataset="MNIST", tasks_number=1, download=False, train=True):
+    def __init__(self, path="./Data", dataset="MNIST", tasks_number=5, download=False, train=True):
         self.num_pixels = 0  # will be set in prepare_formatting
         self.perm_file = ""  # will be set in prepare_formatting
         self.list_perm = []

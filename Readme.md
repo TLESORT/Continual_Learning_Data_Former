@@ -20,7 +20,36 @@ cd Continual_Learning_Data_Former
 pip install .
 ```
 
-### Use
+### Few possible invocations
+
+-   Disjoint tasks
+
+```python
+from continuum.disjoint import Disjoint
+
+#MNIST with 10 tasks of one class
+continuum = Disjoint(path="./Data", dataset="MNIST", task_number=10, download=True, train=True)
+```
+-   Rotations tasks
+
+```python
+from continuum.rotations import Rotations
+
+#MNIST with 5 tasks with various rotations
+continuum = Rotations(path="./Data", dataset="MNIST", tasks_number=5, download=True, train=True, min_rot=0.0,
+                 max_rot=90.0)
+```
+
+-   Permutations tasks
+
+```python
+from continuum.permutations import Permutations
+
+#MNIST with 5 tasks with different permutations
+continuum = Permutations(path="./Data", dataset="MNIST", tasks_number=1, download=False, train=True)
+```
+
+### Use example
 
 ```python
 from continuum.disjoint import Disjoint
@@ -89,28 +118,7 @@ More examples at [Samples](/Samples)
 -   Classes order can be shuffled for disjoint tasks
 -   We can choose the magnitude of rotation for rotations mnist
 
-### Few possible invocations
 
--   Disjoint tasks
-
-```python
-#MNIST with 10 tasks of one class
-continuum = Disjoint(path="./Data", dataset="MNIST", task_number=10, download=True, train=True)
-```
--   Rotations tasks
-
-```python
-#MNIST with 5 tasks with various rotations
-continuum = Rotations(path="./Data", dataset="MNIST", tasks_number=5, download=True, train=True, min_rot=0.0,
-                 max_rot=90.0)
-```
-
--   Permutations tasks
-
-```python
-#MNIST with 5 tasks with different permutations
-continuum = Permutations(path="./Data", dataset="MNIST", tasks_number=1, download=False, train=True)
-```
 
 
 

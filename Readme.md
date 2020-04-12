@@ -1,4 +1,4 @@
-## Continual Learning Data Former
+## Continuum: A dataloader for continual learning
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9273eb0f97b946308248b0007e054e54)](https://app.codacy.com/app/TLESORT/Continual_Learning_Data_Former?utm_source=github.com&utm_medium=referral&utm_content=TLESORT/Continual_Learning_Data_Former&utm_campaign=Badge_Grade_Dashboard)
 [![DOI](https://zenodo.org/badge/198824802.svg)](https://zenodo.org/badge/latestdoi/198824802)

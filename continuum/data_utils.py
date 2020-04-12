@@ -10,40 +10,34 @@ from torchvision import datasets, transforms
 import numpy as np
 import imageio
 
-if os.path.exists("dataset_loaders"):
-    from dataset_loaders.LSUN import load_LSUN
-    from dataset_loaders.cifar10 import load_Cifar10
-    from dataset_loaders.cifar100 import load_Cifar100
-    from dataset_loaders.core50 import load_core50
-    from dataset_loaders.fashion import Fashion
-    from dataset_loaders.kmnist import Kmnist
-else:
-    from .dataset_loaders.LSUN import load_LSUN
-    from .dataset_loaders.cifar10 import load_Cifar10
-    from .dataset_loaders.cifar100 import load_Cifar100
-    from .dataset_loaders.core50 import load_core50
-    from .dataset_loaders.fashion import Fashion
-    from .dataset_loaders.kmnist import Kmnist
+from .datasets.LSUN import load_LSUN
+from .datasets.cifar10 import load_Cifar10
+from .datasets.cifar100 import load_Cifar100
+from .datasets.core50 import load_core50
+from .datasets.fashion import Fashion
+from .datasets.kmnist import Kmnist
 
+
+def get_images_format(dataset):
+
+    if dataset == 'MNIST' or dataset == 'fashion' or dataset == 'mnishion' or "mnist" in dataset:
+        imageSize = 28
+        img_channels = 1
+    elif dataset == 'cifar10' or dataset == 'cifar100':
+        imageSize = 32
+        img_channels = 3
+    elif dataset == 'core10' or dataset == 'core50':
+        # if args.imageSize is at default value we change it to 128
+        imageSize = 128
+        img_channels = 3
+    else:
+        raise Exception("[!] There is no option for " + dataset)
+
+    return imageSize, img_channels
 
 
 def check_args(args):
-    if args.dataset == 'MNIST' or args.dataset == 'fashion' or args.dataset == 'mnishion' or "mnist" in args.task:
-        args.imageSize = 28
-        args.img_channels = 1
-    elif args.dataset == 'cifar10' or args.dataset == 'cifar100':
-        args.imageSize = 32
-        args.img_channels = 3
-    elif args.dataset == 'core10' or args.dataset == 'core50':
-        # if args.imageSize is at default value we change it to 128
-        if args.imageSize == 28:
-            args.imageSize = 128
-        args.img_channels = 3
-        args.path_only = True
-    elif args.dataset == 'mnist_fellowship':
-        pass
-    else:
-        raise Exception("[!] There is no option for " + args.dataset)
+
 
     if "mnist_fellowship" in args.task:
         args.dataset = "mnist_fellowship"
@@ -53,65 +47,57 @@ def check_args(args):
     return args
 
 
-def check_and_Download_data(folder, dataset, task):
+def check_and_Download_data(folder, dataset, scenario):
     # download data if possible
-    if dataset == 'MNIST' or dataset == 'mnishion' or "mnist_fellowship" in task:
-        datasets.MNIST(os.path.join(folder), train=True, download=True, transform=transforms.ToTensor())
-    if dataset == 'fashion' or dataset == 'mnishion' or "mnist_fellowship" in task:
+    if dataset == 'MNIST' or dataset == 'mnishion' or "mnist_fellowship" in scenario:
+        datasets.MNIST(folder, train=True, download=True, transform=transforms.ToTensor())
+    if dataset == 'fashion' or dataset == 'mnishion' or "mnist_fellowship" in scenario:
         Fashion(os.path.join(folder, "fashion"), train=True, download=True, transform=transforms.ToTensor())
     # download data if possible
-    if dataset == 'kmnist' or "mnist_fellowship" in task:
+    if dataset == 'kmnist' or "mnist_fellowship" in scenario:
         Kmnist(os.path.join(folder, "kmnist"), train=True, download=True, transform=transforms.ToTensor())
     if dataset == 'core50' or dataset == 'core10':
         if not os.path.isdir(folder):
             print('This dataset should be downloaded manually')
 
-def load_data(dataset, path2data):
+def load_data(dataset, path2data, train=True):
     if dataset == 'cifar10':
         path2data = os.path.join(path2data, dataset, "processed")
-        x_tr, y_tr, x_te, y_te = load_Cifar10(path2data)
+        x_, y_ = load_Cifar10(path2data, train)
 
-        x_tr = x_tr.float()
-        x_te = x_te.float()
+        x_ = x_.float()
     elif dataset == 'cifar100':
         path2data = os.path.join(path2data, dataset, "processed")
-        x_tr, y_tr, x_te, y_te = load_Cifar100(path2data)
+        x_, y_ = load_Cifar100(path2data, train)
 
-        x_tr = x_tr.float()
-        x_te = x_te.float()
+        x_ = x_.float()
     elif dataset == 'LSUN':
-        x_tr, y_tr, x_te, y_te = load_LSUN(path2data)
+        x_, y_ = load_LSUN(path2data, train)
 
-        x_tr = x_tr.float()
-        x_te = x_te.float()
+        x_ = x_.float()
     elif dataset == 'core50' or dataset == 'core10':
 
-        x_tr, y_tr, x_te, y_te = load_core50(dataset, path2data)
+        x_, y_ = load_core50(dataset, path2data, train)
 
     elif 'mnist_fellowship' in dataset:
         # In this case data will be loaded later dataset by dataset
-        return None, None, None, None
+        return None, None
     else:
 
-        train_file = os.path.join(path2data, dataset, "processed", 'training.pt')
-        test_file = os.path.join(path2data, dataset, "processed", 'test.pt')
+        if train:
+            data_file = os.path.join(path2data, dataset, "processed", 'training.pt')
+        else:
+            data_file = os.path.join(path2data, dataset, "processed", 'test.pt')
 
-        if not os.path.isfile(train_file):
-            raise AssertionError("Missing file: {}".format(train_file))
+        if not os.path.isfile(data_file):
+            raise AssertionError("Missing file: {}".format(data_file))
 
-        if not os.path.isfile(test_file):
-            raise AssertionError("Missing file: {}".format(test_file))
+        x_, y_ = torch.load(data_file)
+        x_ = x_.float() / 255.0
 
-        x_tr, y_tr = torch.load(train_file)
-        x_te, y_te = torch.load(test_file)
+    y_ = y_.view(-1).long()
 
-        x_tr = x_tr.float() / 255.0
-        x_te = x_te.float() / 255.0
-
-    y_tr = y_tr.view(-1).long()
-    y_te = y_te.view(-1).long()
-
-    return x_tr, y_tr, x_te, y_te
+    return x_, y_
 
 
 def visualize_batch(batch, number, shape, path):

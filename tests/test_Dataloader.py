@@ -1,4 +1,4 @@
-from data_loader import DatasetLoader
+from continuum.continuum_loader import ContinuumSetLoader
 import torch
 import pytest
 from torch.utils import data
@@ -20,7 +20,7 @@ def get_fake_dataset():
 
 def test_DataLoader_init(get_fake_dataset):
     fake_dataset = get_fake_dataset
-    dataset = DatasetLoader(fake_dataset)
+    dataset = ContinuumSetLoader(fake_dataset)
 
     if not dataset.current_task == 0:
         raise AssertionError("Test fail")
@@ -33,7 +33,7 @@ def test_DataLoader_init_label_is_dict(get_fake_dataset):
     :return:
     """
     fake_dataset = get_fake_dataset
-    dataset = DatasetLoader(fake_dataset)
+    dataset = ContinuumSetLoader(fake_dataset)
 
     if not isinstance(dataset.labels, dict):
         raise AssertionError("Test fail")
@@ -45,21 +45,10 @@ def test_DataLoader_init_label_size(get_fake_dataset):
     :return:
     """
     fake_dataset = get_fake_dataset
-    dataset = DatasetLoader(fake_dataset)
+    dataset = ContinuumSetLoader(fake_dataset)
 
     if not len(dataset.labels) == dataset_size:
         raise AssertionError("Test fail")
-
-
-
-@pytest.mark.parametrize("init_current_task", [0, 1, 2])
-def test_DataLoader_init_current_task(get_fake_dataset, init_current_task):
-    fake_dataset = get_fake_dataset
-    dataset = DatasetLoader(fake_dataset, current_task=init_current_task)
-
-    if not dataset.current_task == init_current_task:
-        raise AssertionError("Test fail")
-
 
 def test_DataLoader_with_torch(get_fake_dataset):
     """
@@ -68,7 +57,7 @@ def test_DataLoader_with_torch(get_fake_dataset):
     :return:
     """
     fake_dataset = get_fake_dataset
-    dataset = DatasetLoader(fake_dataset)
+    dataset = ContinuumSetLoader(fake_dataset)
     train_loader = data.DataLoader(dataset, batch_size=10, shuffle=True, num_workers=6)
 
     for _, (_, _) in enumerate(train_loader):
@@ -81,7 +70,7 @@ def test_DataLoader_with_torch_loader(get_fake_dataset):
     :return:
     """
     fake_dataset = get_fake_dataset
-    dataset = DatasetLoader(fake_dataset)
+    dataset = ContinuumSetLoader(fake_dataset)
     train_loader = data.DataLoader(dataset, batch_size=10, shuffle=True, num_workers=6)
 
     for _, (batch, label) in enumerate(train_loader):

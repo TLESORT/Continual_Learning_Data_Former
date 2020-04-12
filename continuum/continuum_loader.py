@@ -5,15 +5,13 @@ from torch.utils import data
 import torchvision.transforms.functional as TF
 from PIL import Image
 import os
+import random
 
-if os.path.exists("Sequence_Formers"):
-    from data_utils import make_samples_batche, save_images
-else:
-    from .data_utils import make_samples_batche, save_images
+from continuum.data_utils import make_samples_batche, save_images
 
 
-class DatasetLoader(data.Dataset):
-    def __init__(self, data, current_task=0, transform=None, load_images=False, path=None):
+class ContinuumSetLoader(data.Dataset):
+    def __init__(self, data, transform=None, load_images=False, path=None):
 
         '''
 
@@ -26,10 +24,12 @@ class DatasetLoader(data.Dataset):
         self.dataset = data
         self.n_tasks = len(self.dataset)
 
-        self.current_task = current_task
+        self.current_task = 0
         self.transform = transform
         self.load_images = load_images
         self.path = path
+        if self.load_images and self.path is None:
+            raise Exception("[!] The path to data need to be defined")
         self.shape_img = None
 
         'Initialization'
@@ -52,10 +52,13 @@ class DatasetLoader(data.Dataset):
         self.labels = self.all_labels[self.current_task]
 
         if not load_images:
-            self.shape_img = list(self.dataset[ind_task][1][0].shape)
+            self.shape_img = list(self.dataset[self.current_task][1][0].shape)
 
     def __len__(self):
         return len(self.list_IDs)
+
+    def get_num_tasks(self):
+        return self.n_tasks
 
     def __getitem__(self, index):
         'Generates one sample of data'
@@ -100,12 +103,17 @@ class DatasetLoader(data.Dataset):
         return self
 
     def shuffle_task(self):
-        indices = torch.randperm(len(self.dataset[self.current_task][1]))
-
-        self.dataset[self.current_task][1] = self.dataset[self.current_task][1][indices]
-        self.dataset[self.current_task][2] = self.dataset[self.current_task][2][indices]
-
-        self.reset_labels()
+        random.shuffle(self.list_IDs)
+        # print("OUIIIIIIIIIIIIIIIIIIIIIIi")
+        #
+        # assert len(self.dataset[self.current_task][1]) == len(self.dataset[self.current_task][2])
+        #
+        # indices = torch.randperm(len(self.dataset[self.current_task][1]))
+        #
+        # self.dataset[self.current_task][1] = self.dataset[self.current_task][1][indices]
+        # self.dataset[self.current_task][2] = self.dataset[self.current_task][2][indices]
+        #
+        # self.reset_labels()
         return self
 
     def get_samples_from_ind(self, indices):
@@ -223,10 +231,7 @@ class DatasetLoader(data.Dataset):
         return self.current_task
 
     def save(self, path, force=False):
-        if force:
-            torch.save(self.dataset, path)
-        else:
-            print("WE DO NOT SAVE ANYMORE")
+        torch.save(self.dataset, path)
 
     def visualize_sample(self, path, number, shape, class_=None):
 
@@ -346,5 +351,5 @@ class DatasetLoader(data.Dataset):
 
         if not len(self.labels) == self.dataset[self.current_task][2].size(0):
             raise AssertionError("Sanity check list label ({}) vs label ({}) : {}".format(len(self.labels),
-                                                                           size_label,
-                                                                           origin))
+                                                                                          size_label,
+                                                                                          origin))

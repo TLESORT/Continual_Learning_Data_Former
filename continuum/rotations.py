@@ -1,6 +1,6 @@
 from torchvision import transforms
 import torch
-from builders.continuumbuilder import ContinuumBuilder
+from continuum.continuumbuilder import ContinuumBuilder
 
 
 class Rotations(ContinuumBuilder):

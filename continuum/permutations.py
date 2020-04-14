@@ -1,6 +1,6 @@
 import torch
 import os
-from builders.continuumbuilder import ContinuumBuilder
+from continuum.continuumbuilder import ContinuumBuilder
 from copy import deepcopy
 
 

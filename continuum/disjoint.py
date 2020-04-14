@@ -1,4 +1,4 @@
-from builders.continuumbuilder import ContinuumBuilder
+from continuum.continuumbuilder import ContinuumBuilder
 
 
 class Disjoint(ContinuumBuilder):

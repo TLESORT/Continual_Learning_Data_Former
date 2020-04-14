@@ -13,7 +13,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="#",
-    packages=['builders', 'builders.datasets'],
+    packages=['continuum', 'continuum.datasets'],
     zip_safe=False
 
  )
